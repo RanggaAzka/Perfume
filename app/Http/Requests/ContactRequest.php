@@ -19,6 +19,7 @@ class ContactRequest extends FormRequest
             'phone' => ['required', 'string', 'regex:/^[0-9+\-\s()]{8,20}$/'],
             'message' => ['required', 'string', 'max:2000'],
             'selected_refill' => ['nullable', 'string', 'max:255'],
+            'bottle_size' => ['nullable', 'string', 'in:15,30,45,100'],
             'product_name' => ['nullable', 'string', 'max:255'],
             'type' => ['nullable', 'in:contact,refill,product'],
         ];

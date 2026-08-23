@@ -41,6 +41,41 @@ class ContactMessageAdminTest extends TestCase
         $response->assertSessionHasErrors('phone');
     }
 
+    public function test_refill_request_includes_bottle_size_in_stored_message(): void
+    {
+        $response = $this->post('/contact', [
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'phone' => '+62 812 3456 7890',
+            'message' => 'Hello, I would like to request a refill for "Sauvage".',
+            'selected_refill' => 'Sauvage',
+            'bottle_size' => '30',
+            'type' => 'refill',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('contact_messages', [
+            'email' => 'jane@example.com',
+            'type' => 'refill',
+            'message' => "Hello, I would like to request a refill for \"Sauvage\".\n\nBottle size: 30 ml (Rp 30.000)",
+        ]);
+    }
+
+    public function test_contact_form_rejects_an_invalid_bottle_size(): void
+    {
+        $response = $this->post('/contact', [
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'phone' => '+62 812 3456 7890',
+            'message' => 'Refill please.',
+            'bottle_size' => '50',
+            'type' => 'refill',
+        ]);
+
+        $response->assertSessionHasErrors('bottle_size');
+        $this->assertDatabaseCount('contact_messages', 0);
+    }
+
     public function test_non_admin_cannot_view_messages(): void
     {
         $user = User::factory()->create(['role' => 'customer']);

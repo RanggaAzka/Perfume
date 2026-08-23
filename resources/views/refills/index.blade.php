@@ -12,6 +12,28 @@
             or discover a new scent to carry forward.
         </p>
 
+        <div class="mt-12 max-w-xl border border-black/10">
+            <table class="w-full text-left text-sm">
+                <thead>
+                    <tr class="border-b border-black/10">
+                        <th scope="col" class="px-6 py-4 text-xs font-normal uppercase tracking-widest2 text-ink/50">Bottle Size</th>
+                        <th scope="col" class="px-6 py-4 text-right text-xs font-normal uppercase tracking-widest2 text-ink/50">Refill Price</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-black/5">
+                    @foreach ($bottleSizes as $ml => $price)
+                        <tr>
+                            <td class="px-6 py-4 font-serif text-base">{{ $ml }} ml</td>
+                            <td class="px-6 py-4 text-right font-serif text-base">{{ $price }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p class="border-t border-black/10 px-6 py-3 text-xs uppercase tracking-widest2 text-ink/40">
+                Refill price: Rp {{ number_format($pricePerMl, 0, ',', '.') }} / ml
+            </p>
+        </div>
+
         @if (session('status'))
             <div class="mt-8 border border-gold/40 bg-gold/10 px-4 py-3 text-sm">
                 {{ session('status') }}
@@ -74,6 +96,18 @@
                         @error('phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                     </div>
 
+                    <div>
+                        <label for="bottle_size" class="text-xs uppercase tracking-widest2 text-ink/50">Bottle Size</label>
+                        <select name="bottle_size" id="bottle_size"
+                                class="mt-2 w-full border-0 border-b border-black/20 bg-transparent px-0 py-2 text-sm focus:border-gold focus:ring-0">
+                            <option value="">Select a bottle size</option>
+                            @foreach ($bottleSizes as $ml => $price)
+                                <option value="{{ $ml }}" @selected(old('bottle_size') == $ml)>{{ $ml }} ml — {{ $price }}</option>
+                            @endforeach
+                        </select>
+                        @error('bottle_size') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    </div>
+
                     <input type="hidden" name="selected_refill" value="{{ old('selected_refill') }}">
 
                     <div>
@@ -107,19 +141,37 @@
             var messageField = document.getElementById('message');
             var indicator = document.getElementById('selected-refill');
             var hiddenRefill = document.querySelector('input[name="selected_refill"]');
+            var sizeField = document.getElementById('bottle_size');
             var form = indicator ? indicator.closest('form') : null;
+            var current = '';
+
+            function selectedSize() {
+                return sizeField && sizeField.value ? sizeField.value : '';
+            }
+
+            function composeMessage(name) {
+                var size = selectedSize();
+                return size
+                    ? 'Hello, I would like to request a refill for "' + name + '" — ' + size + ' ml.'
+                    : 'Hello, I would like to request a refill for "' + name + '".';
+            }
+
+            function updateIndicator(name) {
+                if (!indicator) return;
+                var size = selectedSize();
+                indicator.textContent = 'Selected: ' + name + (size ? ' \u00B7 ' + size + ' ml' : '');
+                indicator.classList.remove('hidden');
+            }
 
             function selectRefill(name) {
+                current = name;
                 options.forEach(function (option) {
                     option.classList.toggle('text-gold', option.dataset.refill === name);
                 });
 
-                messageField.value = 'Hello, I would like to request a refill for "' + name + '".';
+                messageField.value = composeMessage(name);
+                updateIndicator(name);
 
-                if (indicator) {
-                    indicator.textContent = 'Selected: ' + name;
-                    indicator.classList.remove('hidden');
-                }
                 if (hiddenRefill) {
                     hiddenRefill.value = name;
                 }
@@ -135,6 +187,14 @@
                     selectRefill(this.dataset.refill);
                 });
             });
+
+            if (sizeField) {
+                sizeField.addEventListener('change', function () {
+                    if (!current) return;
+                    messageField.value = composeMessage(current);
+                    updateIndicator(current);
+                });
+            }
         });
     </script>
 @endsection

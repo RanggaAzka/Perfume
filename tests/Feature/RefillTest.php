@@ -23,6 +23,20 @@ class RefillTest extends TestCase
         $response->assertDontSee('Discontinued Scent');
     }
 
+    public function test_public_refill_page_shows_bottle_sizes_and_prices(): void
+    {
+        $response = $this->get('/refills');
+
+        $response->assertOk();
+        $response->assertSee('Refill Price');
+        $response->assertSee('Rp 1.000 / ml');
+
+        foreach (Refill::BOTTLE_SIZES as $ml => $price) {
+            $response->assertSee("{$ml} ml");
+            $response->assertSee($price);
+        }
+    }
+
     public function test_non_admin_cannot_manage_refills(): void
     {
         $user = User::factory()->create(['role' => 'customer']);

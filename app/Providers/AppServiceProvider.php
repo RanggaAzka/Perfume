@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Refill;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -31,6 +32,14 @@ class AppServiceProvider extends ServiceProvider
                 $settings = Schema::hasTable('site_settings') ? SiteSetting::current() : null;
 
                 $view->with('siteSettings', $settings);
+            }
+        );
+
+        View::composer(
+            ['refills.index', 'home.refill-service'],
+            function ($view) {
+                $view->with('bottleSizes', Refill::BOTTLE_SIZES)
+                    ->with('pricePerMl', Refill::PRICE_PER_ML);
             }
         );
     }

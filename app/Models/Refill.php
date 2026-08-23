@@ -10,6 +10,19 @@ class Refill extends Model
 {
     use HasFactory;
 
+    public const PRICE_PER_ML = 1000;
+
+    /**
+     * Available refill bottle sizes (in ml) mapped to their fixed price,
+     * derived from PRICE_PER_ML.
+     */
+    public const BOTTLE_SIZES = [
+        15 => 'Rp 15.000',
+        30 => 'Rp 30.000',
+        45 => 'Rp 45.000',
+        100 => 'Rp 100.000',
+    ];
+
     protected $fillable = [
         'name',
         'is_active',

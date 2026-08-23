@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
 use App\Models\ContactMessage;
+use App\Models\Refill;
 use App\Services\FonnteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -24,6 +25,20 @@ class ContactController extends Controller
     {
         $data = $request->validated();
         $data['type'] ??= ContactMessage::TYPE_CONTACT;
+
+        // Keep the requested bottle size (and its price) attached to the message so the
+        // admin notification is complete even when JavaScript could not run.
+        $bottleSize = null;
+        if ($data['type'] === ContactMessage::TYPE_REFILL && ! empty($data['bottle_size'])) {
+            $ml = (int) $data['bottle_size'];
+            $price = Refill::BOTTLE_SIZES[$ml] ?? null;
+            $bottleSize = $price ? "{$ml} ml ({$price})" : "{$ml} ml";
+        }
+        unset($data['bottle_size']);
+
+        if ($bottleSize) {
+            $data['message'] .= "\n\nBottle size: {$bottleSize}";
+        }
 
         $message = ContactMessage::create($data);
 
