@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" preserveAspectRatio="xMidYMid slice">
+  <rect width="900" height="900" fill="#0d0d0d"/>
+  <rect x="0" y="0" width="900" height="900" fill="url(#grad)"/>
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1a1a"/>
+      <stop offset="1" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(260,300) rotate(-8)">
+    <rect x="-70" y="140" width="140" height="260" rx="12" fill="#efe6d8" stroke="#b79a5a" stroke-width="3"/>
+    <rect x="-45" y="60" width="90" height="90" rx="8" fill="#000000"/>
+    <rect x="-25" y="15" width="50" height="55" rx="6" fill="#ffffff" stroke="#b79a5a" stroke-width="2"/>
+    <text x="0" y="290" font-family="Georgia, serif" font-size="26" fill="#111111" text-anchor="middle">VANE</text>
+    <text x="0" y="320" font-family="Georgia, serif" font-size="26" fill="#111111" text-anchor="middle">SSENCE</text>
+  </g>
+
+  <g transform="translate(560,260) rotate(6)">
+    <rect x="-70" y="140" width="140" height="260" rx="12" fill="#efe6d8" stroke="#b79a5a" stroke-width="3"/>
+    <rect x="-45" y="60" width="90" height="90" rx="8" fill="#1a1a1a"/>
+    <rect x="-25" y="15" width="50" height="55" rx="6" fill="#ffffff" stroke="#b79a5a" stroke-width="2"/>
+    <text x="0" y="290" font-family="Georgia, serif" font-size="24" fill="#111111" text-anchor="middle">DYNA</text>
+    <text x="0" y="320" font-family="Georgia, serif" font-size="24" fill="#111111" text-anchor="middle">MYST</text>
+  </g>
+</svg>

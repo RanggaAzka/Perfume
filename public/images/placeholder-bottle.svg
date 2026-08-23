@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 500">
+  <rect width="300" height="500" fill="#f4f4f2"/>
+  <rect x="110" y="60" width="80" height="40" rx="6" fill="#111111"/>
+  <rect x="130" y="30" width="40" height="35" rx="4" fill="#ffffff" stroke="#111111"/>
+  <rect x="90" y="100" width="120" height="300" rx="10" fill="#ffffff" stroke="#111111" stroke-width="2"/>
+  <rect x="105" y="220" width="90" height="70" fill="#111111" opacity="0.05"/>
+  <text x="150" y="255" font-family="Georgia, serif" font-size="16" fill="#111111" text-anchor="middle">PERFUME</text>
+</svg>
