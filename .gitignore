@@ -5,5 +5,7 @@ events.scanned
 maintenance.php
 routes.php
 routes.scanned
-schedule-*
-services.json
+/public/hot
+.phpunit.result.cache
+*.mjs.timestamp-*
+vite.config.js.timestamp-*

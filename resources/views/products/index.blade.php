@@ -1,40 +1,133 @@
 @extends('layouts.app')
 
 @section('title', 'Our Collection — ' . config('app.name'))
-@section('meta_description', 'Browse the full collection of fragrances, each crafted with premium character.')
+@section('meta_description', 'Jelajahi koleksi Eau de Parfum signature dari Perfu.me — diracik dengan karakter premium, perpaduan aroma khas, dan harga yang jujur.')
 
 @section('content')
-    <section class="mx-auto max-w-7xl px-6 pb-24 pt-40 md:px-10">
-        <div class="mb-16 max-w-lg">
-            <p class="section-label">Collection</p>
-            <h1 class="mt-3 font-serif text-5xl">Our Collection</h1>
-        </div>
 
-        @if ($products->isEmpty())
-            <p class="text-sm text-ink/60">New scents are on their way — please check back soon.</p>
-        @else
-            <div class="grid gap-16 md:grid-cols-2">
-                @foreach ($products as $product)
-                    <a href="{{ route('products.show', $product) }}" class="group block">
-                        <div class="relative overflow-hidden bg-[#f4f4f2]">
-                            <img src="{{ $product->imageUrl() }}" alt="{{ $product->name }}" loading="lazy"
-                                 class="h-96 w-full object-contain p-10 transition duration-700 group-hover:scale-105">
+{{-- ============================================================
+     COLLECTION HERO HEADER
+     ============================================================ --}}
+<section class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 pt-12 sm:pt-20 pb-10 sm:pb-12">
+    <div class="reveal max-w-2xl">
+        <p class="section-label">Collection</p>
+        <h1 class="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[62px] font-normal text-[#111111] leading-[1.08] tracking-tight">
+            Signature Fragrances.
+        </h1>
+        <p class="mt-4 sm:mt-5 text-xs sm:text-sm text-[#111111]/70 leading-relaxed font-sans font-light">
+            Diramu teliti dalam <em>small batch</em> menggunakan <em>fragrance oil</em> pilihan, alkohol <em>food-grade</em>, dan perpaduan notes yang penuh pertimbangan. Temukan wangi yang diciptakan untuk menyempurnakan rasa percaya dirimu.
+        </p>
+    </div>
+</section>
+
+{{-- ============================================================
+     PRODUCTS SHOWCASE GRID
+     ============================================================ --}}
+<section class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 pb-16 sm:pb-28">
+    @if ($products->isEmpty())
+        <div class="border border-[#111111]/10 bg-[#f7f7f5] p-12 sm:p-16 text-center">
+            <p class="text-sm text-[#111111]/60">Varian signature baru saat ini sedang dalam proses peracikan di lab kami — silakan cek kembali segera.</p>
+        </div>
+    @else
+        <div class="grid gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-14">
+            @foreach ($products as $product)
+                <div class="reveal group flex flex-col justify-between border border-[#111111]/10 bg-[#f7f7f5] p-6 sm:p-10 lg:p-12 transition-all duration-500 hover:border-[#111111]/30 hover:shadow-lg">
+
+                    {{-- Top Card Header: Badge & Category --}}
+                    <div class="flex items-center justify-between border-b border-[#111111]/10 pb-4 sm:pb-5">
+                        <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#111111]/50">
+                            Eau de Parfum · 30ml
+                        </span>
+                        @if ($product->fragrance_family)
+                            <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#b79a5a]">
+                                {{ $product->fragrance_family }}
+                            </span>
+                        @endif
+                    </div>
+
+                    {{-- Center: Bottle Display --}}
+                    <div class="my-6 sm:my-10 flex items-center justify-center py-4 sm:py-6">
+                        <a href="{{ route('products.show', $product) }}" class="inline-block">
+                            <img src="{{ $product->imageUrl() }}"
+                                 alt="{{ $product->name }}"
+                                 loading="lazy"
+                                 class="h-[260px] sm:h-[340px] lg:h-[380px] w-auto object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)] transition-transform duration-500 group-hover:scale-105">
+                        </a>
+                    </div>
+
+                    {{-- Bottom: Details & CTA --}}
+                    <div class="border-t border-[#111111]/10 pt-5 sm:pt-6">
+                        <div class="flex items-baseline justify-between gap-4">
+                            <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#111111]">
+                                <a href="{{ route('products.show', $product) }}" class="transition hover:opacity-75">
+                                    {{ $product->name }}
+                                </a>
+                            </h2>
+                            <span class="font-serif text-lg sm:text-xl lg:text-2xl text-[#111111]">
+                                Rp 45.000
+                            </span>
                         </div>
-                        <div class="mt-6 flex items-start justify-between gap-4">
-                            <div>
-                                <h2 class="font-serif text-2xl">{{ $product->name }}</h2>
-                                <p class="mt-2 max-w-xs text-sm text-ink/60">{{ $product->short_description }}</p>
-                                @if ($product->fragranceNotes->isNotEmpty())
-                                    <p class="mt-3 text-xs uppercase tracking-widest2 text-ink/40">
-                                        {{ $product->fragranceNotes->pluck('name')->join(' · ') }}
-                                    </p>
-                                @endif
+
+                        <p class="mt-3 text-xs sm:text-sm text-[#111111]/70 leading-relaxed font-sans font-light">
+                            {{ $product->short_description }}
+                        </p>
+
+                        {{-- Fragrance Notes Tags --}}
+                        @if ($product->fragranceNotes->isNotEmpty())
+                            <div class="mt-5 sm:mt-6 flex flex-wrap items-center gap-2">
+                                <span class="text-[11px] uppercase tracking-widest text-[#111111]/40 font-medium mr-1">Notes:</span>
+                                @foreach ($product->fragranceNotes as $note)
+                                    <span class="inline-block bg-white px-2.5 sm:px-3 py-1 text-[11px] font-sans font-light text-[#111111]/80 border border-[#111111]/10">
+                                        {{ $note->name }}
+                                    </span>
+                                @endforeach
                             </div>
-                            <span class="whitespace-nowrap text-xs uppercase tracking-widest2 text-gold">Discover</span>
+                        @endif
+
+                        {{-- Action Link --}}
+                        <div class="mt-6 sm:mt-8 flex items-center justify-between pt-2">
+                            <a href="{{ route('products.show', $product) }}"
+                               class="inline-block text-xs font-medium tracking-wider text-[#111111] border-b border-[#111111] pb-1 transition hover:opacity-50 uppercase">
+                                View Scent Details &rarr;
+                            </a>
+
+                            @if ($product->longevity)
+                                <span class="text-[11px] text-[#111111]/50 font-sans font-light">
+                                    Longevity: {{ $product->longevity }}
+                                </span>
+                            @endif
                         </div>
-                    </a>
-                @endforeach
+                    </div>
+
+                </div>
+            @endforeach
+        </div>
+    @endif
+</section>
+
+{{-- ============================================================
+     REFILL PROMO BANNER
+     ============================================================ --}}
+<section class="border-t border-[#111111]/10 bg-white">
+    <div class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 py-16 sm:py-24">
+        <div class="grid items-center gap-8 lg:grid-cols-12">
+            <div class="reveal lg:col-span-8 max-w-2xl">
+                <p class="section-label">Refill Station</p>
+                <h2 class="mt-3 font-serif text-2xl sm:text-3xl lg:text-4xl text-[#111111] font-normal leading-tight">
+                    Looking for everyday versatility?
+                </h2>
+                <p class="mt-3 sm:mt-4 text-xs sm:text-sm text-[#111111]/70 font-sans font-light leading-relaxed">
+                    Jelajahi direktori refill kami dengan lebih dari 20+ pilihan inspirasi aroma dunia mulai dari Rp 20.000. Bawa botol parfummu sendiri atau pilih dari koleksi botol kaca eksklusif kami.
+                </p>
             </div>
-        @endif
-    </section>
+            <div class="reveal lg:col-span-4 flex lg:justify-end">
+                <a href="{{ route('refills.index') }}"
+                   class="inline-block bg-[#111111] text-white px-8 py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-black">
+                    Explore Refills &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 @endsection

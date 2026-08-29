@@ -1,4 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@font-face {
+    font-family: 'Zaloga';
+    src: url('../fonts/Zaloga.ttf') format('truetype'), url('/fonts/Zaloga.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zaloga';
+    src: url('../fonts/Zaloga.ttf') format('truetype'), url('/fonts/Zaloga.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -9,13 +25,13 @@ html {
 }
 
 body {
-    @apply bg-white text-ink font-sans antialiased;
+    @apply bg-white text-[#111111] font-sans antialiased;
 }
 
 .reveal {
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.is-visible {
@@ -24,5 +40,19 @@ body {
 }
 
 .section-label {
-    @apply text-xs uppercase tracking-widest2 text-gold font-medium;
+    @apply text-xs uppercase tracking-widest text-[#111111]/50 font-medium;
 }
+
+@keyframes floatBottle {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(0.5deg);
+    }
+}
+
+.animate-float {
+    animation: floatBottle 6s ease-in-out infinite;
+}
+

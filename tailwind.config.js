@@ -17,8 +17,9 @@ export default {
                 gold: '#b79a5a',
             },
             fontFamily: {
-                serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-                sans: ['"Jost"', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                serif: ['"Zaloga"', 'Georgia', 'serif'],
+                zaloga: ['"Zaloga"', 'serif'],
+                sans: ['"Poppins"', '"Inter"', 'sans-serif'],
             },
             letterSpacing: {
                 widest2: '0.35em',

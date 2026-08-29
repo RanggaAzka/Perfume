@@ -1,46 +1,70 @@
 @php
     $navLinks = [
-        'home' => 'Home',
-        'about' => 'About',
-        'story' => 'Story',
-        'products.index' => 'Collection',
-        'refills.index' => 'Refill',
-        // 'ingredients' => 'Ingredients',
-        'contact.create' => 'Contact',
+        'about' => ['label' => 'About', 'url' => route('about')],
+        'story' => ['label' => 'Story', 'url' => route('story')],
+        'products' => ['label' => 'Products', 'url' => route('products.index')],
+        'refills' => ['label' => 'Refills', 'url' => route('refills.index')],
+        'contact' => ['label' => 'Contact', 'url' => route('contact.create')],
     ];
 @endphp
 
-<section class="relative overflow-hidden bg-ink md:grid md:grid-cols-2 md:bg-white">
-    <div class="relative z-10 flex min-h-[640px] flex-col justify-between gap-10 px-6 pb-10 pt-8 text-white md:min-h-[760px] md:px-16 md:pb-12 md:pt-10 md:text-ink">
-        <a href="{{ route('home') }}" class="font-serif text-2xl italic tracking-wide">
-            {{ config('app.name') }}
-        </a>
+<section class="relative w-full min-h-screen lg:h-screen lg:min-h-[800px] bg-white overflow-hidden flex flex-col justify-between">
+    {{-- Dark Block Rectangle on Right Side (Full Height 100% top to bottom) --}}
+    <div class="absolute right-0 top-0 bottom-0 h-full w-full lg:w-[37%] bg-[#363636] hidden lg:block pointer-events-none z-0"></div>
 
-        <div class="flex flex-col gap-5">
-            <h1 class="font-serif text-5xl leading-[1.05] md:text-7xl">
-                Smell Good.<br>Feel Confident.
-            </h1>
-            <p class="max-w-sm text-sm leading-relaxed text-white/70 md:text-ink/60">
-                Discover affordable fragrances with premium character, designed for every moment.
-            </p>
-            <a href="{{ route('products.index') }}"
-               class="mt-2 inline-block w-fit border-b border-current pb-1 text-sm transition hover:border-gold hover:text-gold">
-                Discover Scents
+    {{-- Main Container (Full Height Flex layout: Logo at top, Headline in middle, Nav at bottom) --}}
+    <div class="relative z-10 mx-auto w-full max-w-[1440px] h-full min-h-screen lg:min-h-[800px] flex flex-col justify-between px-8 py-8 sm:px-12 sm:py-10 lg:px-16 lg:py-12">
+        {{-- Header / Logo --}}
+        <div class="z-20">
+            <a href="{{ route('home') }}" class="inline-block transition hover:opacity-80">
+                <img src="{{ asset('images/Perfume.png') }}"
+                     alt="Perfu.me"
+                     class="h-9 sm:h-11 md:h-12 w-24 object-contain">
             </a>
         </div>
 
-        <nav class="hidden gap-8 md:flex">
-            @foreach ($navLinks as $routeName => $label)
-                <a href="{{ route($routeName) }}"
-                   class="text-sm text-ink/60 transition hover:text-gold {{ request()->routeIs($routeName) ? 'text-gold' : '' }}">
-                    {{ $label }}
-                </a>
-            @endforeach
-        </nav>
+        {{-- Hero Content (Left) & Mobile Bottles --}}
+        <div class="grid lg:grid-cols-12 items-center my-auto py-8 lg:py-0 z-20">
+            {{-- Sisi Kiri: Headline & CTA --}}
+            <div class="lg:col-span-6 max-w-lg">
+                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-normal text-[#111111] leading-[1.06] tracking-tight">
+                    Smell Good, Feel Confident.
+                </h1>
+                <p class="mt-5 text-xs sm:text-sm text-[#111111]/70 leading-relaxed font-sans font-light max-w-sm">
+                    Temukan parfum berkualitas dengan karakter aroma premium yang terjangkau, dirancang untuk menemani setiap momen percaya dirimu.
+                </p>
+                <div class="mt-8">
+                    <a href="{{ route('products.index') }}"
+                       class="inline-block text-xs tracking-wider text-[#111111] border-b border-[#111111] pb-1 transition hover:opacity-60 font-medium">
+                        Discover Scents
+                    </a>
+                </div>
+            </div>
+
+            {{-- Mobile-only bottle display (Stacked below text on small screens) --}}
+            <div class="lg:hidden mt-10 flex justify-center">
+                <img src="{{ asset('images/hero-bottles.png') }}"
+                     alt="Perfume Signature Bottles"
+                     class="w-full max-w-[360px] object-contain drop-shadow-xl animate-float">
+            </div>
+        </div>
+
+        {{-- Minimalist Bottom Navigation --}}
+        <div class="z-20 pt-6">
+            <nav class="flex items-center flex-wrap gap-8 sm:gap-10 text-xs text-[#111111]/80 font-sans font-light tracking-wide">
+                @foreach ($navLinks as $item)
+                    <a href="{{ $item['url'] }}" class="transition hover:text-[#111111]">
+                        {{ $item['label'] }}
+                    </a>
+                @endforeach
+            </nav>
+        </div>
     </div>
 
-    <div class="relative min-h-[420px] bg-gradient-to-br from-ink to-black md:min-h-[760px]">
-        <img src="{{ asset('images/hero-bottles.svg') }}" alt="Vanessence and Dynamyst perfume bottles"
-             class="absolute inset-0 z-0 h-full w-full object-cover object-center md:-left-14 md:w-[calc(100%+3.5rem)]">
+    {{-- Desktop Floating Bottles (Centered across the split line boundary between white & dark shape) --}}
+    <div class="hidden lg:flex absolute right-[16%] xl:right-[17%] top-1/2 -translate-y-1/2 z-10 pointer-events-none items-center justify-center">
+        <img src="{{ asset('images/hero-bottles.png') }}"
+             alt="Perfume Signature Bottles"
+             class="w-[640px] xl:w-[760px] max-w-none object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] animate-float">
     </div>
 </section>

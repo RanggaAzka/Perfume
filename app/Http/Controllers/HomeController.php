@@ -13,7 +13,7 @@ class HomeController extends Controller
     {
         $featuredProducts = Product::active()->ordered()->with('fragranceNotes')->take(4)->get();
         $signatureNotes = FragranceNote::withCount('products')->orderByDesc('products_count')->take(6)->get();
-        $refillPreview = Refill::active()->ordered()->take(8)->get();
+        $refillPreview = Refill::active()->ordered()->take(12)->get();
 
         return view('home', compact('featuredProducts', 'signatureNotes', 'refillPreview'));
     }
@@ -26,28 +26,5 @@ class HomeController extends Controller
     public function story(): View
     {
         return view('pages.story');
-    }
-
-    public function ingredients(): View
-    {
-        $notes = FragranceNote::withCount('products')->with('products')->orderBy('name')->get();
-
-        $grouped = $notes
-            ->groupBy(function (FragranceNote $note) {
-                // A note's "primary" position is whichever position (top/heart/base)
-                // it plays most often across the products that use it.
-                if ($note->products->isEmpty()) {
-                    return 'unassigned';
-                }
-
-                return $note->products
-                    ->groupBy(fn ($product) => $product->pivot->position)
-                    ->sortByDesc(fn ($group) => $group->count())
-                    ->keys()
-                    ->first();
-            })
-            ->only(['top', 'heart', 'base']);
-
-        return view('pages.ingredients', compact('notes', 'grouped'));
     }
 }

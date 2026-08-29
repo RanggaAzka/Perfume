@@ -1,11 +1,15 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-vb1uKbLK.css",
+    "file": "assets/app-DGgRXObE.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/fonts/Zaloga.ttf": {
+    "file": "assets/Zaloga-DCMwbvAl.ttf",
+    "src": "resources/fonts/Zaloga.ttf"
+  },
   "resources/js/app.js": {
-    "file": "assets/app-BKcNYgWM.js",
+    "file": "assets/app-Ccc9EbZJ.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

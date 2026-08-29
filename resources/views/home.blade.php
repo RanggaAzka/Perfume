@@ -6,9 +6,6 @@
 @section('content')
     @include('home.hero')
     @include('home.products', ['featuredProducts' => $featuredProducts])
-    @include('home.story')
     @include('home.refill-preview', ['refillPreview' => $refillPreview])
-    @include('home.ingredients', ['signatureNotes' => $signatureNotes])
-    @include('home.refill-service')
-    @include('home.cta')
+    @include('home.newsletter')
 @endsection

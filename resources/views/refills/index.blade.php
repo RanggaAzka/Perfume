@@ -1,200 +1,322 @@
 @extends('layouts.app')
 
 @section('title', 'Refill Collection — ' . config('app.name'))
-@section('meta_description', 'A curated selection of fragrances available for refill in-store.')
+@section('meta_description', 'Jelajahi koleksi pilihan aroma parfum yang tersedia untuk pengisian ulang langsung di studio Perfu.me Dramaga.')
 
 @section('content')
-    <section class="mx-auto max-w-4xl px-6 pb-24 pt-40 md:px-10">
-        <p class="section-label">Refill</p>
-        <h1 class="mt-3 font-serif text-5xl">Refill Collection</h1>
-        <p class="mt-6 max-w-lg text-sm leading-relaxed text-ink/60">
-            A curated selection of fragrances available for refill in-store. Bring a bottle back to life,
-            or discover a new scent to carry forward.
-        </p>
 
-        <div class="mt-12 max-w-xl border border-black/10">
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="border-b border-black/10">
-                        <th scope="col" class="px-6 py-4 text-xs font-normal uppercase tracking-widest2 text-ink/50">Bottle Size</th>
-                        <th scope="col" class="px-6 py-4 text-right text-xs font-normal uppercase tracking-widest2 text-ink/50">Refill Price</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-black/5">
-                    @foreach ($bottleSizes as $ml => $price)
-                        <tr>
-                            <td class="px-6 py-4 font-serif text-base">{{ $ml }} ml</td>
-                            <td class="px-6 py-4 text-right font-serif text-base">{{ $price }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <p class="border-t border-black/10 px-6 py-3 text-xs uppercase tracking-widest2 text-ink/40">
-                Refill price: Rp {{ number_format($pricePerMl, 0, ',', '.') }} / ml
+{{-- ============================================================
+     HERO SECTION: REFILL INTRODUCTION & VISUAL
+     ============================================================ --}}
+<section class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 pt-12 sm:pt-20 pb-12 sm:pb-16">
+    <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+
+        {{-- Left: Text & Pricing Strip --}}
+        <div class="reveal lg:col-span-6 max-w-xl">
+            <p class="section-label">Refill Counter</p>
+            <h1 class="mt-4 font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[62px] font-normal text-[#111111] leading-[1.08] tracking-tight">
+                Refill Collection.
+            </h1>
+            <p class="mt-4 sm:mt-5 text-xs sm:text-sm text-[#111111]/70 leading-relaxed font-sans font-light">
+                Solusi cerdas dan berkelanjutan untuk menikmati wewangian favoritmu setiap hari. Bawa kembali botol parfummu untuk diisi ulang di studio kami, atau pesan racikan refill segar dalam berbagai pilihan ukuran.
             </p>
+
+            {{-- Bottle Sizes & Pricing Grid --}}
+            <div class="mt-8 border border-[#111111]/10 bg-[#f7f7f5] p-5 sm:p-6">
+                <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#111111]/40">Daftar Ukuran &amp; Harga</span>
+                <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    @foreach ($bottleSizes as $ml => $price)
+                        <div class="bg-white border border-[#111111]/10 p-3 flex flex-col justify-between">
+                            <span class="font-sans text-xs text-[#111111]/60">{{ $ml }} ml</span>
+                            <span class="mt-1 font-serif text-sm sm:text-base font-normal text-[#111111]">{{ $price }}</span>
+                        </div>
+                    @endforeach
+                </div>
+                <p class="mt-3 pt-3 border-t border-[#111111]/10 text-[11px] uppercase tracking-widest text-[#111111]/50 font-sans text-center">
+                    Tarif Refill: Rp {{ number_format($pricePerMl, 0, ',', '.') }} / ml
+                </p>
+            </div>
         </div>
 
-        @if (session('status'))
-            <div class="mt-8 border border-gold/40 bg-gold/10 px-4 py-3 text-sm">
-                {{ session('status') }}
+        {{-- Right: Studio Refill Station Photo & Bottle Inset --}}
+        <div class="reveal lg:col-span-6 flex justify-center lg:justify-end">
+            <div class="relative w-full max-w-[480px]">
+                {{-- Travertine / Studio Station Image --}}
+                <div class="overflow-hidden bg-[#f7f7f5] p-3 sm:p-4 border border-[#111111]/10">
+                    <img src="{{ asset('images/refill-station.jpg') }}"
+                         alt="Perfu.me Refill Station and Decanting Bar"
+                         loading="lazy"
+                         class="w-full h-[280px] sm:h-[340px] lg:h-[380px] object-cover transition-transform duration-700 hover:scale-[1.02]">
+                </div>
+
+                {{-- Inset Badge / Caption --}}
+                <div class="mt-3 flex items-center justify-between text-[11px] text-[#111111]/50 font-sans">
+                    <span>Perfu.me Decanting Bar — Dramaga, Bogor</span>
+                    <span class="text-[#b79a5a] font-medium">20+ Varian Aroma</span>
+                </div>
             </div>
-        @endif
-
-        @if ($grouped->isEmpty())
-            <p class="mt-16 text-sm text-ink/50">New fragrances are being added to the refill counter — please check back soon.</p>
-        @else
-            <div class="mt-16 divide-y divide-black/10">
-                @foreach ($grouped as $letter => $refills)
-                    <div class="grid gap-6 py-10 md:grid-cols-[80px_1fr]">
-                        <p class="font-serif text-4xl italic text-ink/30">{{ $letter }}</p>
-                        <ul class="grid gap-x-8 gap-y-3 sm:grid-cols-2">
-                            @foreach ($refills as $refill)
-                                <li>
-                                    <button type="button" data-refill="{{ $refill->name }}"
-                                            class="refill-option w-full text-left font-serif text-lg transition hover:text-gold focus:outline-none focus-visible:text-gold">
-                                        {{ $refill->name }}
-                                    </button>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endforeach
-            </div>
-
-            <div id="refill-request" class="mt-16 border-t border-black/10 pt-10">
-                <form method="POST" action="{{ route('contact.store') }}" class="space-y-6">
-                    @csrf
-                    <input type="hidden" name="type" value="refill">
-
-                    <div class="flex flex-wrap items-baseline justify-between gap-4">
-                        <h2 class="font-serif text-2xl">Request a Refill</h2>
-                        <span id="selected-refill"
-                              class="{{ old('message') ? '' : 'hidden' }} text-xs uppercase tracking-widest2 text-gold">
-                            {{ old('selected_refill') }}
-                        </span>
-                    </div>
-
-                    <div>
-                        <label for="name" class="text-xs uppercase tracking-widest2 text-ink/50">Name</label>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                               class="mt-2 w-full border-0 border-b border-black/20 bg-transparent px-0 py-2 text-sm focus:border-gold focus:ring-0">
-                        @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div>
-                        <label for="email" class="text-xs uppercase tracking-widest2 text-ink/50">Email</label>
-                        <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                               class="mt-2 w-full border-0 border-b border-black/20 bg-transparent px-0 py-2 text-sm focus:border-gold focus:ring-0">
-                        @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div>
-                        <label for="phone" class="text-xs uppercase tracking-widest2 text-ink/50">Phone (WhatsApp)</label>
-                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" required
-                               placeholder="+62 8xx xxxx xxxx"
-                               class="mt-2 w-full border-0 border-b border-black/20 bg-transparent px-0 py-2 text-sm focus:border-gold focus:ring-0">
-                        @error('phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div>
-                        <label for="bottle_size" class="text-xs uppercase tracking-widest2 text-ink/50">Bottle Size</label>
-                        <select name="bottle_size" id="bottle_size"
-                                class="mt-2 w-full border-0 border-b border-black/20 bg-transparent px-0 py-2 text-sm focus:border-gold focus:ring-0">
-                            <option value="">Select a bottle size</option>
-                            @foreach ($bottleSizes as $ml => $price)
-                                <option value="{{ $ml }}" @selected(old('bottle_size') == $ml)>{{ $ml }} ml — {{ $price }}</option>
-                            @endforeach
-                        </select>
-                        @error('bottle_size') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <input type="hidden" name="selected_refill" value="{{ old('selected_refill') }}">
-
-                    <div>
-                        <label for="message" class="text-xs uppercase tracking-widest2 text-ink/50">Message</label>
-                        <textarea name="message" id="message" rows="4" required
-                                  class="mt-2 w-full border-0 border-b border-black/20 bg-transparent px-0 py-2 text-sm focus:border-gold focus:ring-0">{{ old('message') }}</textarea>
-                        @error('message') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-
-                    <button type="submit"
-                            class="border border-ink px-8 py-3 text-sm uppercase tracking-widest2 transition hover:border-gold hover:text-gold">
-                        Send Refill Request
-                    </button>
-                </form>
-            </div>
-        @endif
-
-        <div class="mt-16 border-t border-black/10 pt-10 text-sm text-ink/60">
-            <p>Refill availability is subject to change. Visit us in-store or get in touch to check on a specific scent.</p>
-            <a href="{{ route('contact.create') }}" class="mt-4 inline-block w-fit border-b border-ink/40 pb-1 text-sm text-ink transition hover:border-gold hover:text-gold">
-                Contact Us
-            </a>
         </div>
-    </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var options = document.querySelectorAll('.refill-option');
-            if (!options.length) return;
+    </div>
+</section>
 
-            var messageField = document.getElementById('message');
-            var indicator = document.getElementById('selected-refill');
-            var hiddenRefill = document.querySelector('input[name="selected_refill"]');
-            var sizeField = document.getElementById('bottle_size');
-            var form = indicator ? indicator.closest('form') : null;
-            var current = '';
+{{-- ============================================================
+     HOW IT WORKS: 3 STEPS
+     ============================================================ --}}
+<section class="border-y border-[#111111]/10 bg-[#f7f7f5] py-14 sm:py-20">
+    <div class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16">
 
-            function selectedSize() {
-                return sizeField && sizeField.value ? sizeField.value : '';
-            }
+        <div class="reveal mb-10 sm:mb-12 max-w-lg">
+            <p class="section-label">Cara Kerja</p>
+            <h2 class="mt-3 font-serif text-2xl sm:text-3xl lg:text-4xl text-[#111111] font-normal leading-tight">
+                Simple, Conscious, Accessible.
+            </h2>
+        </div>
 
-            function composeMessage(name) {
-                var size = selectedSize();
-                return size
-                    ? 'Hello, I would like to request a refill for "' + name + '" — ' + size + ' ml.'
-                    : 'Hello, I would like to request a refill for "' + name + '".';
-            }
+        <div class="grid gap-px bg-[#111111]/10 md:grid-cols-3">
+            <div class="reveal bg-white p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-sans font-medium text-[#111111]/40 uppercase tracking-widest">Langkah 01</span>
+                    <h3 class="mt-3 font-serif text-lg sm:text-xl text-[#111111] font-normal">Pilih Aroma Favorit</h3>
+                    <p class="mt-2 text-xs sm:text-sm leading-relaxed text-[#111111]/70 font-sans font-light">
+                        Pilih dari 20+ varian aroma inspirasi dunia yang terdaftar pada direktori kami di bawah ini.
+                    </p>
+                </div>
+            </div>
 
-            function updateIndicator(name) {
-                if (!indicator) return;
-                var size = selectedSize();
-                indicator.textContent = 'Selected: ' + name + (size ? ' \u00B7 ' + size + ' ml' : '');
-                indicator.classList.remove('hidden');
-            }
+            <div class="reveal bg-white p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-sans font-medium text-[#111111]/40 uppercase tracking-widest">Langkah 02</span>
+                    <h3 class="mt-3 font-serif text-lg sm:text-xl text-[#111111] font-normal">Tentukan Ukuran Botol</h3>
+                    <p class="mt-2 text-xs sm:text-sm leading-relaxed text-[#111111]/70 font-sans font-light">
+                        Bawa botol spray milikmu sendiri atau gunakan flacon kaca eksklusif yang tersedia di studio (15ml, 30ml, 45ml, 100ml).
+                    </p>
+                </div>
+            </div>
 
-            function selectRefill(name) {
-                current = name;
-                options.forEach(function (option) {
-                    option.classList.toggle('text-gold', option.dataset.refill === name);
-                });
+            <div class="reveal bg-white p-6 sm:p-8 flex flex-col justify-between">
+                <div>
+                    <span class="text-xs font-sans font-medium text-[#111111]/40 uppercase tracking-widest">Langkah 03</span>
+                    <h3 class="mt-3 font-serif text-lg sm:text-xl text-[#111111] font-normal">Pengisian Segar di Tempat</h3>
+                    <p class="mt-2 text-xs sm:text-sm leading-relaxed text-[#111111]/70 font-sans font-light">
+                        Parfum ditakar dan diisikan langsung menggunakan minyak wangi murni dan pelarut food-grade yang aman di kulit.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-                messageField.value = composeMessage(name);
-                updateIndicator(name);
+    </div>
+</section>
 
-                if (hiddenRefill) {
-                    hiddenRefill.value = name;
+{{-- ============================================================
+     REFILL DIRECTORY & REQUEST FORM
+     ============================================================ --}}
+<section class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 py-16 sm:py-24">
+
+    @if (session('status'))
+        <div class="mb-10 border border-[#b79a5a]/40 bg-[#b79a5a]/10 p-4 text-xs sm:text-sm text-[#111111] flex items-center justify-between">
+            <span>{{ session('status') }}</span>
+            <span class="font-medium">✓</span>
+        </div>
+    @endif
+
+    @if ($grouped->isEmpty())
+        <div class="border border-[#111111]/10 bg-[#f7f7f5] p-12 sm:p-16 text-center">
+            <p class="text-sm text-[#111111]/60">Varian aroma refill baru sedang disiapkan — silakan cek kembali segera.</p>
+        </div>
+    @else
+        <div class="grid gap-12 lg:grid-cols-12 lg:gap-16 items-start">
+
+            {{-- Left Column: Alphabetical Scents Directory --}}
+            <div class="reveal lg:col-span-7">
+                <div class="mb-6 flex items-baseline justify-between border-b border-[#111111]/10 pb-4">
+                    <div>
+                        <p class="section-label">Aroma Directory</p>
+                        <h2 class="mt-1 font-serif text-2xl sm:text-3xl text-[#111111] font-normal">Daftar Pilihan Aroma</h2>
+                    </div>
+                    <span class="text-xs text-[#111111]/50 font-sans">Klik untuk memilih</span>
+                </div>
+
+                <div class="divide-y divide-[#111111]/10">
+                    @foreach ($grouped as $letter => $refills)
+                        <div class="grid gap-4 sm:gap-6 py-5 sm:py-6 sm:grid-cols-[50px_1fr] items-baseline">
+                            <p class="font-serif text-3xl sm:text-4xl text-[#111111]/25 font-normal">{{ $letter }}</p>
+                            <ul class="grid gap-2.5 sm:grid-cols-2">
+                                @foreach ($refills as $refill)
+                                    <li>
+                                        <button type="button"
+                                                data-refill="{{ $refill->name }}"
+                                                class="refill-option group w-full text-left p-2.5 border border-transparent hover:border-[#111111]/10 hover:bg-[#f7f7f5] transition-all duration-200 flex items-center justify-between">
+                                            <span class="font-serif text-base sm:text-lg text-[#111111] group-hover:text-[#b79a5a] transition">
+                                                {{ $refill->name }}
+                                            </span>
+                                            <span class="text-[11px] text-[#111111]/30 group-hover:text-[#b79a5a] font-sans font-light opacity-0 group-hover:opacity-100 transition">
+                                                Pilih &rarr;
+                                            </span>
+                                        </button>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Right Column: Refill Request Form (Sticky on desktop) --}}
+            <div id="refill-request" class="reveal lg:col-span-5 sticky top-24">
+                <div class="border border-[#111111]/10 bg-white p-6 sm:p-8 shadow-sm">
+                    <form method="POST" action="{{ route('contact.store') }}" class="space-y-5">
+                        @csrf
+                        <input type="hidden" name="type" value="refill">
+
+                        <div>
+                            <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#111111]/40">Order Online</span>
+                            <h2 class="mt-1 font-serif text-2xl text-[#111111] font-normal">Request a Refill</h2>
+                            <p class="mt-1 text-xs text-[#111111]/65 font-sans font-light">
+                                Pilih aroma dari daftar di sebelah kiri atau ketikkan aroma yang Anda inginkan.
+                            </p>
+                            <div id="selected-refill-container" class="{{ old('selected_refill') ? '' : 'hidden' }} mt-3">
+                                <span class="text-[11px] uppercase tracking-widest text-[#111111]/40 block mb-1">Aroma Terpilih:</span>
+                                <span id="selected-refill"
+                                      class="inline-block bg-[#b79a5a]/15 text-[#111111] px-3 py-1.5 text-xs font-medium border border-[#b79a5a]/40">
+                                    {{ old('selected_refill') }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="name" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Nama Lengkap *</label>
+                            <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                                   placeholder="e.g. Alex Pratama"
+                                   class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
+                            @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Alamat Email *</label>
+                            <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                                   placeholder="alex@example.com"
+                                   class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
+                            @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Nomor WhatsApp *</label>
+                            <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" required
+                                   placeholder="+62 8xx xxxx xxxx"
+                                   class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
+                            @error('phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label for="bottle_size" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Ukuran Botol</label>
+                            <select name="bottle_size" id="bottle_size"
+                                    class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
+                                <option value="">Pilih ukuran botol (opsional)</option>
+                                @foreach ($bottleSizes as $ml => $price)
+                                    <option value="{{ $ml }}" @selected(old('bottle_size') == $ml)>{{ $ml }} ml — {{ $price }}</option>
+                                @endforeach
+                            </select>
+                            @error('bottle_size') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <input type="hidden" name="selected_refill" value="{{ old('selected_refill') }}">
+
+                        <div>
+                            <label for="message" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Pesan / Permintaan Refill *</label>
+                            <textarea name="message" id="message" rows="3" required
+                                      placeholder="Tuliskan varian aroma yang diinginkan atau detail pemesanan..."
+                                      class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">{{ old('message') }}</textarea>
+                            @error('message') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-[#111111] text-white py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-black">
+                            Send Refill Request &rarr;
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    @endif
+
+    <div class="mt-16 border-t border-[#111111]/10 pt-8 text-xs sm:text-sm text-[#111111]/60 font-sans flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p>Ketersediaan aroma refill dapat berubah sewaktu-waktu. Kunjungi counter kami di Dramaga atau hubungi kami untuk informasi aroma tertentu.</p>
+        <a href="{{ route('contact.create') }}" class="shrink-0 text-xs font-medium tracking-wider text-[#111111] border-b border-[#111111] pb-1 transition hover:opacity-50 uppercase">
+            Contact Us &rarr;
+        </a>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var options = document.querySelectorAll('.refill-option');
+        if (!options.length) return;
+
+        var messageField = document.getElementById('message');
+        var indicator = document.getElementById('selected-refill');
+        var container = document.getElementById('selected-refill-container');
+        var hiddenRefill = document.querySelector('input[name="selected_refill"]');
+        var sizeField = document.getElementById('bottle_size');
+        var form = indicator ? indicator.closest('form') : null;
+        var current = '';
+
+        function selectedSize() {
+            return sizeField && sizeField.value ? sizeField.value : '';
+        }
+
+        function composeMessage(name) {
+            var size = selectedSize();
+            return size
+                ? 'Halo Perfu.me, saya ingin memesan refill untuk varian "' + name + '" — ukuran ' + size + ' ml.'
+                : 'Halo Perfu.me, saya ingin memesan refill untuk varian "' + name + '".';
+        }
+
+        function updateIndicator(name) {
+            if (!indicator) return;
+            var size = selectedSize();
+            indicator.textContent = name + (size ? ' \u00B7 ' + size + ' ml' : '');
+            if (container) container.classList.remove('hidden');
+        }
+
+        function selectRefill(name) {
+            current = name;
+            options.forEach(function (btn) {
+                if (btn.dataset.refill === name) {
+                    btn.classList.add('bg-[#b79a5a]/10', 'border-[#b79a5a]/40');
+                } else {
+                    btn.classList.remove('bg-[#b79a5a]/10', 'border-[#b79a5a]/40');
                 }
-
-                if (form) {
-                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-                messageField.focus();
-            }
-
-            options.forEach(function (option) {
-                option.addEventListener('click', function () {
-                    selectRefill(this.dataset.refill);
-                });
             });
 
-            if (sizeField) {
-                sizeField.addEventListener('change', function () {
-                    if (!current) return;
-                    messageField.value = composeMessage(current);
-                    updateIndicator(current);
-                });
+            messageField.value = composeMessage(name);
+            updateIndicator(name);
+
+            if (hiddenRefill) {
+                hiddenRefill.value = name;
             }
+
+            if (window.innerWidth < 1024 && form) {
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            messageField.focus();
+        }
+
+        options.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                selectRefill(this.dataset.refill);
+            });
         });
-    </script>
+
+        if (sizeField) {
+            sizeField.addEventListener('change', function () {
+                if (!current) return;
+                messageField.value = composeMessage(current);
+                updateIndicator(current);
+            });
+        }
+    });
+</script>
+
 @endsection

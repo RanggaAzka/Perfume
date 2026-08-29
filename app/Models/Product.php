@@ -106,8 +106,14 @@ class Product extends Model
 
     public function imageUrl(): string
     {
-        return $this->image
-            ? asset('storage/' . $this->image)
-            : asset('images/placeholder-bottle.svg');
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+
+        if (file_exists(public_path('images/' . $this->slug . '.png'))) {
+            return asset('images/' . $this->slug . '.png');
+        }
+
+        return asset('images/placeholder-bottle.svg');
     }
 }

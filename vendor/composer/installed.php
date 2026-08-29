@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'perfume/brand-website',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'd3f8fb967dd51216ee7d3b40778efa5323fa2395',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -572,9 +572,9 @@
             'dev_requirement' => false,
         ),
         'perfume/brand-website' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'd3f8fb967dd51216ee7d3b40778efa5323fa2395',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
