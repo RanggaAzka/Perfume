@@ -64,7 +64,7 @@
                                 </a>
                             </h2>
                             <span class="font-serif text-lg sm:text-xl lg:text-2xl text-[#111111]">
-                                Rp 45.000
+                                {{ $product->priceFormatted() }}
                             </span>
                         </div>
 
@@ -97,6 +97,22 @@
                                 </span>
                             @endif
                         </div>
+
+                        {{-- Add to Cart --}}
+                        <form method="POST" action="{{ route('cart.add') }}" class="mt-5 flex items-center gap-2 border-t border-[#111111]/10 pt-4">
+                            @csrf
+                            <input type="hidden" name="type" value="product">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <select name="quantity" aria-label="Jumlah" class="border border-[#111111]/20 bg-white px-2 py-2 text-xs text-[#111111] focus:border-[#111111] focus:outline-none">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                            <button type="submit"
+                                    class="flex-1 bg-[#b79a5a] text-white px-4 py-2.5 text-[11px] font-medium uppercase tracking-widest transition hover:bg-[#a8884b]">
+                                Tambah ke Keranjang
+                            </button>
+                        </form>
                     </div>
 
                 </div>

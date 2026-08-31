@@ -17,7 +17,6 @@ class UpdateRefillRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('refills', 'name')->ignore($this->route('refill'))],
             'is_active' => ['sometimes', 'boolean'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 }

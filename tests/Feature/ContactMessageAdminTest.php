@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\ContactMessage;
 use App\Models\ContactMessageReply;
+use App\Models\Refill;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -74,6 +75,43 @@ class ContactMessageAdminTest extends TestCase
 
         $response->assertSessionHasErrors('bottle_size');
         $this->assertDatabaseCount('contact_messages', 0);
+    }
+
+    public function test_refill_request_records_a_refill_order(): void
+    {
+        Refill::factory()->create(['name' => 'Sauvage']);
+
+        $this->post('/contact', [
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'phone' => '+62 812 3456 7890',
+            'message' => 'I would like a Sauvage refill.',
+            'selected_refill' => 'Sauvage',
+            'bottle_size' => '30',
+            'type' => 'refill',
+        ])->assertRedirect();
+
+        $this->assertDatabaseCount('refill_orders', 1);
+        $this->assertDatabaseHas('refill_orders', [
+            'refill_id' => Refill::where('name', 'Sauvage')->value('id'),
+            'bottle_size' => 30,
+            'quantity' => 1,
+        ]);
+    }
+
+    public function test_refill_request_with_unmatched_name_records_no_order(): void
+    {
+        $this->post('/contact', [
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'phone' => '+62 812 3456 7890',
+            'message' => 'Refill please.',
+            'selected_refill' => 'Unknown Scent',
+            'type' => 'refill',
+        ])->assertRedirect();
+
+        $this->assertDatabaseCount('refill_orders', 0);
+        $this->assertDatabaseCount('contact_messages', 1);
     }
 
     public function test_non_admin_cannot_view_messages(): void

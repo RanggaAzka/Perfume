@@ -12,6 +12,7 @@ class ContactMessage extends Model
     public const TYPE_CONTACT = 'contact';
     public const TYPE_REFILL = 'refill';
     public const TYPE_PRODUCT = 'product';
+    public const TYPE_ORDER = 'order';
 
     protected $fillable = ['name', 'email', 'phone', 'type', 'message', 'is_read'];
 
@@ -27,17 +28,23 @@ class ContactMessage extends Model
         return $this->hasMany(ContactMessageReply::class)->oldest();
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function getTypeLabelAttribute(): string
     {
         return match ($this->type) {
             self::TYPE_REFILL => 'Refill Request',
             self::TYPE_PRODUCT => 'Product Inquiry',
+            self::TYPE_ORDER => 'Order',
             default => 'Contact',
         };
     }
 
     public static function types(): array
     {
-        return [self::TYPE_CONTACT, self::TYPE_REFILL, self::TYPE_PRODUCT];
+        return [self::TYPE_CONTACT, self::TYPE_REFILL, self::TYPE_PRODUCT, self::TYPE_ORDER];
     }
 }

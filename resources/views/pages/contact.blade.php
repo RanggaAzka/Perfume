@@ -77,14 +77,20 @@
                 </div>
 
                 <div class="border-t border-[#111111]/10 pt-5">
+                    @php
+                        $instagramUrl = $siteSettings?->instagram_url ?: 'https://instagram.com/perfu.mefragrance';
+                        $tiktokUrl    = $siteSettings?->tiktok_url    ?: 'https://tiktok.com/@perfu.mefragrance';
+                        $instagramHandle = '@' . ltrim(basename(parse_url($instagramUrl, PHP_URL_PATH) ?: ''), '/@');
+                        $tiktokHandle    = '@' . ltrim(basename(parse_url($tiktokUrl, PHP_URL_PATH) ?: ''), '/@');
+                    @endphp
                     <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#111111]/40">Social Channels</span>
                     <div class="mt-2 flex flex-wrap gap-4 text-xs font-sans">
-                        <a href="https://instagram.com/perfu.mefragrance" target="_blank" rel="noopener" class="underline hover:opacity-60 transition">
-                            Instagram @perfu.mefragrance
+                        <a href="{{ $instagramUrl }}" target="_blank" rel="noopener" class="underline hover:opacity-60 transition">
+                            Instagram {{ $instagramHandle }}
                         </a>
                         <span class="text-[#111111]/30">·</span>
-                        <a href="https://tiktok.com/@perfu.mefragrance" target="_blank" rel="noopener" class="underline hover:opacity-60 transition">
-                            TikTok @perfu.mefragrance
+                        <a href="{{ $tiktokUrl }}" target="_blank" rel="noopener" class="underline hover:opacity-60 transition">
+                            TikTok {{ $tiktokHandle }}
                         </a>
                     </div>
                 </div>
@@ -95,13 +101,6 @@
         {{-- Right: Contact / Inquiry Form --}}
         <div class="reveal lg:col-span-7">
             <div class="border border-[#111111]/10 bg-white p-6 sm:p-10 lg:p-12">
-
-                @if (session('status'))
-                    <div class="mb-8 border border-[#b79a5a]/40 bg-[#b79a5a]/10 p-4 text-xs sm:text-sm text-[#111111] flex items-center justify-between">
-                        <span>{{ session('status') }}</span>
-                        <span class="font-medium">✓</span>
-                    </div>
-                @endif
 
                 <div class="mb-8">
                     <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#111111]/40">Send a Message</span>

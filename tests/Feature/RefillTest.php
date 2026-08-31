@@ -28,7 +28,7 @@ class RefillTest extends TestCase
         $response = $this->get('/refills');
 
         $response->assertOk();
-        $response->assertSee('Refill Price');
+        $response->assertSee('Daftar Ukuran & Harga');
         $response->assertSee('Rp 1.000 / ml');
 
         foreach (Refill::BOTTLE_SIZES as $ml => $price) {

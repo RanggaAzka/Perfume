@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactRequest;
 use App\Models\ContactMessage;
 use App\Models\Refill;
+use App\Models\RefillOrder;
 use App\Services\FonnteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -29,8 +30,10 @@ class ContactController extends Controller
         // Keep the requested bottle size (and its price) attached to the message so the
         // admin notification is complete even when JavaScript could not run.
         $bottleSize = null;
+        $bottleMl = null;
         if ($data['type'] === ContactMessage::TYPE_REFILL && ! empty($data['bottle_size'])) {
             $ml = (int) $data['bottle_size'];
+            $bottleMl = $ml;
             $price = Refill::BOTTLE_SIZES[$ml] ?? null;
             $bottleSize = $price ? "{$ml} ml ({$price})" : "{$ml} ml";
         }
@@ -42,9 +45,33 @@ class ContactController extends Controller
 
         $message = ContactMessage::create($data);
 
+        if ($data['type'] === ContactMessage::TYPE_REFILL && ! empty($data['selected_refill'])) {
+            $this->recordRefillOrder($message, $data['selected_refill'], $bottleMl);
+        }
+
         $this->notifyAdmin($message);
 
-        return back()->with('status', 'Thank you — your message has been sent. We will be in touch soon.');
+        return back()->with('status', 'Pesan Anda telah terkirim — tim kami akan segera menghubungi Anda via WhatsApp atau email. Terima kasih!');
+    }
+
+    /**
+     * Persist a structured refill order so the admin can see how many times each
+     * fragrance has been requested. A missing/mismatched fragrance name is ignored
+     * rather than failing the customer's submission.
+     */
+    private function recordRefillOrder(ContactMessage $message, string $refillName, ?int $bottleMl): void
+    {
+        $refill = Refill::where('name', $refillName)->first();
+
+        if (! $refill) {
+            return;
+        }
+
+        RefillOrder::create([
+            'contact_message_id' => $message->id,
+            'refill_id' => $refill->id,
+            'bottle_size' => $bottleMl,
+        ]);
     }
 
     /**

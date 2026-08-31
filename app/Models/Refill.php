@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Refill extends Model
 {
@@ -36,6 +37,11 @@ class Refill extends Model
         ];
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(RefillOrder::class);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -44,5 +50,17 @@ class Refill extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order')->orderBy('name');
+    }
+
+    public static function priceFor(int $ml): ?int
+    {
+        return isset(self::BOTTLE_SIZES[$ml]) ? $ml * self::PRICE_PER_ML : null;
+    }
+
+    public static function priceFormattedFor(int $ml): ?string
+    {
+        $price = self::priceFor($ml);
+
+        return $price === null ? null : 'Rp ' . number_format($price, 0, ',', '.');
     }
 }

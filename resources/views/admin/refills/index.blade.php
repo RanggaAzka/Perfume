@@ -42,7 +42,7 @@
                                 {{ $refill->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-ink/60">{{ $refill->sort_order }}</td>
+                        <td class="px-6 py-4 text-ink/60">{{ $refill->orders_count }}</td>
                         <td class="px-6 py-4">
                             <div class="flex justify-end gap-4 text-xs uppercase tracking-widest2">
                                 <a href="{{ route('admin.refills.edit', $refill) }}" class="hover:text-gold">Edit</a>

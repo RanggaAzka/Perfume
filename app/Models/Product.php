@@ -12,12 +12,36 @@ class Product extends Model
 {
     use HasFactory;
 
+    /**
+     * Curated list of dominant scent profiles ("main accords"), stored per
+     * product as [{ accord, percent }] so customers can see the dominant
+     * character at a glance (highest percentage first).
+     *
+     * @var list<string>
+     */
+    public const ACCORDS = [
+        'Woody',
+        'Floral',
+        'Fresh',
+        'Citrus',
+        'Sweet',
+        'Spicy',
+        'Green',
+        'Aquatic',
+        'Amber',
+        'Gourmand',
+        'Leather',
+        'Powdery',
+    ];
+
     protected $fillable = [
         'name',
         'slug',
         'short_description',
         'description',
         'image',
+        'price',
+        'main_accords',
         'fragrance_family',
         'category',
         'longevity',
@@ -29,6 +53,7 @@ class Product extends Model
     {
         return [
             'is_active' => 'boolean',
+            'main_accords' => 'array',
         ];
     }
 
@@ -102,6 +127,24 @@ class Product extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function priceFormatted(): string
+    {
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
+    }
+
+    /**
+     * Main accords sorted from the most dominant (highest percentage) to the
+     * least, e.g. [{ accord: 'Woody', percent: 60 }, ...]. Falls back to an
+     * empty collection when the product has no accord data.
+     */
+    public function mainAccordsSorted(): \Illuminate\Support\Collection
+    {
+        return collect($this->main_accords ?? [])
+            ->filter(fn (array $row) => ($row['accord'] ?? '') !== '' && ($row['percent'] ?? 0) > 0)
+            ->sortByDesc('percent')
+            ->values();
     }
 
     public function imageUrl(): string

@@ -24,6 +24,42 @@
             {{ $message->message }}
         </div>
 
+        @if ($message->orderItems->isNotEmpty())
+            <div class="mt-6 border-t border-black/10 pt-6">
+                <p class="text-xs uppercase tracking-widest2 text-ink/40">Order Items ({{ $message->orderItems->count() }})</p>
+                <div class="mt-3 overflow-x-auto border border-black/10">
+                    <table class="min-w-full divide-y divide-black/10 text-sm">
+                        <thead>
+                            <tr class="text-left text-[11px] uppercase tracking-widest2 text-ink/40">
+                                <th class="px-4 py-2.5">Item</th>
+                                <th class="px-4 py-2.5">Size</th>
+                                <th class="px-4 py-2.5">Qty</th>
+                                <th class="px-4 py-2.5">Unit Price</th>
+                                <th class="px-4 py-2.5 text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-black/10">
+                            @foreach ($message->orderItems as $item)
+                                <tr>
+                                    <td class="px-4 py-3 font-serif">{{ $item->label }}</td>
+                                    <td class="px-4 py-3 text-ink/70">{{ $item->bottle_size ? $item->bottle_size . ' ml' : '30ml EDP' }}</td>
+                                    <td class="px-4 py-3 text-ink/70">{{ $item->quantity }}</td>
+                                    <td class="px-4 py-3 text-ink/70">Rp {{ number_format($item->unit_price, 0, ',', '.') }}</td>
+                                    <td class="px-4 py-3 text-right">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr class="border-t border-black/10 bg-[#fafaf8]">
+                                <td colspan="4" class="px-4 py-3 text-xs uppercase tracking-widest2 text-ink/50 text-right">Total</td>
+                                <td class="px-4 py-3 text-right font-medium">Rp {{ number_format($message->orderItems->sum('subtotal'), 0, ',', '.') }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        @endif
+
         <div class="mt-8 flex flex-wrap gap-4 border-t border-black/10 pt-6 text-xs uppercase tracking-widest2">
             <a href="mailto:{{ $message->email }}" class="border border-ink px-4 py-2 hover:border-gold hover:text-gold">Reply by Email</a>
 

@@ -11,6 +11,7 @@
                     \App\Models\ContactMessage::TYPE_CONTACT => 'Contact',
                     \App\Models\ContactMessage::TYPE_REFILL => 'Refill Request',
                     \App\Models\ContactMessage::TYPE_PRODUCT => 'Product Inquiry',
+                    \App\Models\ContactMessage::TYPE_ORDER => 'Order',
                 ] as $type => $label)
                     <option value="{{ $type }}" @selected(request('type') === $type)>{{ $label }}</option>
                 @endforeach

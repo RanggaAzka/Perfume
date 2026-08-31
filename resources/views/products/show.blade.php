@@ -6,18 +6,6 @@
 @section('content')
 
 {{-- ============================================================
-     STATUS NOTIFICATION
-     ============================================================ --}}
-@if (session('status'))
-    <div class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 pt-8">
-        <div class="border border-[#b79a5a]/40 bg-[#b79a5a]/10 p-4 text-xs sm:text-sm text-[#111111] flex items-center justify-between">
-            <span>{{ session('status') }}</span>
-            <span class="font-medium">✓</span>
-        </div>
-    </div>
-@endif
-
-{{-- ============================================================
      PRODUCT MAIN SHOWCASE SECTION
      ============================================================ --}}
 <section class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 py-10 sm:py-16 lg:py-20">
@@ -52,7 +40,7 @@
             {{-- Price & Scent Family Badge --}}
             <div class="mt-4 flex flex-wrap items-center gap-3 sm:gap-4 pb-5 sm:pb-6 border-b border-[#111111]/10">
                 <span class="font-serif text-2xl sm:text-3xl text-[#111111]">
-                    Rp 45.000
+                    {{ $product->priceFormatted() }}
                 </span>
                 <span class="text-xs uppercase tracking-widest text-[#111111]/40">·</span>
                 <span class="text-xs uppercase tracking-widest text-[#111111]/60 font-sans">
@@ -71,6 +59,46 @@
                     {{ $product->description ?: $product->short_description }}
                 </p>
             </div>
+
+            {{-- Main Accords --}}
+            @if ($product->mainAccordsSorted()->isNotEmpty())
+                @php
+                    $accordColors = [
+                        'Woody' => '#8b5e3c',
+                        'Floral' => '#c07a94',
+                        'Fresh' => '#6f9e8f',
+                        'Citrus' => '#d09a3f',
+                        'Sweet' => '#cf7480',
+                        'Spicy' => '#b3543e',
+                        'Green' => '#7d8b4f',
+                        'Aquatic' => '#6d9bbf',
+                        'Amber' => '#b0703a',
+                        'Gourmand' => '#b97a57',
+                        'Leather' => '#5a4a42',
+                        'Powdery' => '#a89a8f',
+                    ];
+                @endphp
+                <div class="mt-8">
+                    <p class="section-label">Main Accords</p>
+                    <div class="mt-4 border border-[#111111]/10 bg-[#f7f7f5] p-5 sm:p-6 space-y-4">
+                        @foreach ($product->mainAccordsSorted() as $accord)
+                            @php
+                                $color = $accordColors[$accord['accord']] ?? '#b79a5a';
+                            @endphp
+                            <div class="flex items-center gap-3">
+                                <span class="flex w-28 shrink-0 items-center gap-2">
+                                    <span class="shrink-0 rounded-full" style="width: 6px; height: 6px; background-color: {{ $color }}"></span>
+                                    <span class="text-[11px] uppercase tracking-widest text-[#111111] font-sans font-medium">{{ $accord['accord'] }}</span>
+                                </span>
+                                <div class="flex-1 rounded-full" style="height: 10px; background-color: {{ $color }}1A">
+                                    <div class="h-full rounded-full" style="width: {{ $accord['percent'] }}%; height: 100%; background-color: {{ $color }}"></div>
+                                </div>
+                                <span class="w-9 shrink-0 text-right text-[11px] font-sans font-semibold text-[#111111]">{{ $accord['percent'] }}%</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             {{-- Specifications Strip --}}
             <div class="mt-8 grid grid-cols-2 gap-4 border-y border-[#111111]/10 py-5 text-xs font-sans">
@@ -92,6 +120,25 @@
                 </div>
             </div>
 
+            {{-- Add to Cart --}}
+            <form method="POST" action="{{ route('cart.add') }}" class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                @csrf
+                <input type="hidden" name="type" value="product">
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <div class="flex items-center justify-between border border-[#111111]/20 bg-[#f7f7f5] px-4 py-3">
+                    <label for="product-qty" class="text-xs uppercase tracking-widest text-[#111111]/50 font-medium mr-4">Qty</label>
+                    <select name="quantity" id="product-qty" class="bg-transparent text-xs text-[#111111] focus:outline-none">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <option value="{{ $i }}" @selected(old('quantity') == $i)>{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+                <button type="submit"
+                        class="inline-block text-center bg-[#b79a5a] text-white px-8 py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-[#a8884b]">
+                    Tambah ke Keranjang
+                </button>
+            </form>
+
             {{-- Action CTAs --}}
             <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <a href="#enquire"
@@ -99,7 +146,7 @@
                     Order / Enquire Now
                 </a>
 
-                <a href="https://wa.me/6281383415432?text={{ urlencode('Halo Perfu.me, saya ingin memesan ' . $product->name . ' (30ml EDP, Rp 45.000).') }}"
+                <a href="https://wa.me/6281383415432?text={{ urlencode('Halo Perfu.me, saya ingin memesan ' . $product->name . ' (30ml EDP, ' . $product->priceFormatted() . ').') }}"
                    target="_blank"
                    rel="noopener"
                    class="inline-flex items-center justify-center gap-2 border border-[#111111]/20 bg-white px-6 py-3.5 text-xs font-medium text-[#111111] uppercase tracking-widest transition hover:border-[#111111]">
@@ -219,7 +266,7 @@
         </div>
 
         @php
-            $orderMessage = old('message', 'Halo Perfu.me, saya ingin memesan "' . $product->name . '" (30ml EDP, Rp 45.000). Mohon informasi ketersediaan dan pengirimannya.');
+            $orderMessage = old('message', 'Halo Perfu.me, saya ingin memesan "' . $product->name . '" (30ml EDP, ' . $product->priceFormatted() . '). Mohon informasi ketersediaan dan pengirimannya.');
         @endphp
 
         <form method="POST" action="{{ route('contact.store') }}" class="reveal space-y-6">
@@ -297,7 +344,7 @@
                                         {{ $item->name }}
                                     </a>
                                 </h3>
-                                <span class="font-serif text-base sm:text-lg text-[#111111]">Rp 45.000</span>
+                                <span class="font-serif text-base sm:text-lg text-[#111111]">{{ $item->priceFormatted() }}</span>
                             </div>
                             <p class="mt-2 text-xs text-[#111111]/70 font-sans font-light leading-relaxed">
                                 {{ $item->short_description }}

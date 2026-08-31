@@ -38,6 +38,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $data['main_accords'] = $this->normalizeMainAccords($data['main_accords'] ?? null);
         unset($data['fragrance_notes'], $data['fragrance_note_positions']);
 
         if ($request->hasFile('image')) {
@@ -64,6 +65,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         $data = $request->validated();
+        $data['main_accords'] = $this->normalizeMainAccords($data['main_accords'] ?? null);
         unset($data['fragrance_notes'], $data['fragrance_note_positions']);
 
         if ($request->hasFile('image')) {
@@ -91,6 +93,24 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('status', 'Product deleted.');
+    }
+
+    /**
+     * Keep only the accords the admin gave a percentage (>= 1%), sorted from
+     * the most dominant to the least, so the stored payload matches the shape
+     * expected by Product::mainAccordsSorted().
+     */
+    private function normalizeMainAccords(?array $rows): array
+    {
+        return collect($rows ?? [])
+            ->filter(fn (array $row) => ($row['percent'] ?? 0) > 0)
+            ->map(fn (array $row) => [
+                'accord' => $row['accord'],
+                'percent' => (int) $row['percent'],
+            ])
+            ->sortByDesc('percent')
+            ->values()
+            ->all();
     }
 
     /**

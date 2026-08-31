@@ -6,10 +6,13 @@ in-store **refill collection** directory, and an authenticated admin panel
 covering products, refills, fragrance notes, and contact messages. Built
 with Laravel 11, Blade, Tailwind CSS, and Vite.
 
-This is not a marketplace or ecommerce site — there is intentionally no
-cart, checkout, payment gateway, wishlist, customer account, or product
-reviews. It's a brand/campaign site with a lightweight lead-capture contact
-form and an admin panel a non-technical client can run day to day.
+This is not a full marketplace or ecommerce site — there is no payment
+gateway, wishlist, customer account, or product reviews. It's a brand site
+with a lightweight lead-capture flow: a guest cart lets customers bundle
+multiple signature products and refill sizes into a single order request,
+which lands in the admin message inbox and as a WhatsApp alert rather than
+going through a checkout processor. A contact form and an admin panel a
+non-technical client can run day to day round out the site.
 
 This is a **complete Laravel project** — every standard Laravel file
 (`bootstrap/app.php`, `config/*`, `public/index.php`, `artisan`, etc.) is
@@ -157,6 +160,14 @@ GET  /products/{product:slug}
 GET  /refills
 GET  /contact
 POST /contact
+```
+
+**Cart (guest, session based — slide-over drawer, no separate page)**
+```
+POST   /cart/add
+PATCH  /cart/{key}
+DELETE /cart/{key}
+POST   /cart/checkout
 ```
 
 **Auth**

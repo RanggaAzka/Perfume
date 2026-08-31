@@ -52,6 +52,13 @@
         </div>
 
         <div>
+            <label for="price" class="text-xs uppercase tracking-widest2 text-ink/50">Price (Rp)</label>
+            <input type="number" name="price" id="price" min="0" step="1000" value="{{ old('price', $product->price ?? 45000) }}"
+                   class="mt-2 w-full border border-black/20 px-3 py-2 text-sm focus:border-gold focus:ring-0">
+            @error('price') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+        </div>
+
+        <div>
             <span class="text-xs uppercase tracking-widest2 text-ink/50">Fragrance Notes</span>
             <p class="mt-1 text-xs text-ink/40">Tick a note to include it, then choose its olfactive position.</p>
             @php
@@ -77,6 +84,51 @@
                 @endforeach
             </div>
         </div>
+
+        <div data-accord-picker>
+            <span class="text-xs uppercase tracking-widest2 text-ink/50">Main Accords</span>
+            <p class="mt-1 text-xs text-ink/40">Pilih fragrance yang dominan (maks 4), lalu atur persentasenya. Accord tertinggi tampil paling atas di halaman produk.</p>
+
+            <div data-accord-rows class="mt-3 space-y-2">
+                @foreach (old('main_accords', $product->main_accords ?? []) as $index => $row)
+                    <div class="accord-row flex items-center gap-2">
+                        <select name="main_accords[{{ $index }}][accord]"
+                                class="flex-1 border border-black/20 px-2 py-1.5 text-sm focus:border-gold focus:ring-0">
+                            <option value="">&mdash; Pilih Fragrance &mdash;</option>
+                            @foreach (App\Models\Product::ACCORDS as $accord)
+                                <option value="{{ $accord }}" @selected(($row['accord'] ?? '') === $accord)>{{ $accord }}</option>
+                            @endforeach
+                        </select>
+                        <input type="number" name="main_accords[{{ $index }}][percent]" min="1" max="100"
+                               value="{{ $row['percent'] ?? '' }}" placeholder="%"
+                               class="w-20 border border-black/20 px-2 py-1.5 text-sm focus:border-gold focus:ring-0">
+                        <button type="button" data-accord-remove aria-label="Hapus accord"
+                                class="px-2 text-xl leading-none text-ink/50 hover:text-red-600 transition">&times;</button>
+                    </div>
+                @endforeach
+            </div>
+
+            <button type="button" data-accord-add
+                    class="mt-3 border border-black/20 px-3 py-1.5 text-xs uppercase tracking-widest2 text-ink/70 transition hover:border-gold hover:text-gold">
+                + Tambah Fragrance
+            </button>
+        </div>
+
+        <template id="accord-row-template">
+            <div class="accord-row flex items-center gap-2">
+                <select name="main_accords[0][accord]"
+                        class="flex-1 border border-black/20 px-2 py-1.5 text-sm focus:border-gold focus:ring-0">
+                    <option value="">&mdash; Pilih Fragrance &mdash;</option>
+                    @foreach (App\Models\Product::ACCORDS as $accord)
+                        <option value="{{ $accord }}">{{ $accord }}</option>
+                    @endforeach
+                </select>
+                <input type="number" name="main_accords[0][percent]" min="1" max="100" placeholder="%"
+                       class="w-20 border border-black/20 px-2 py-1.5 text-sm focus:border-gold focus:ring-0">
+                <button type="button" data-accord-remove aria-label="Hapus accord"
+                        class="px-2 text-xl leading-none text-ink/50 hover:text-red-600 transition">&times;</button>
+            </div>
+        </template>
     </div>
 
     <div class="space-y-6">

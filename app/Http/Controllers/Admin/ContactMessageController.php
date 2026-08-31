@@ -33,7 +33,7 @@ class ContactMessageController extends Controller
             $message->update(['is_read' => true]);
         }
 
-        $message->load('replies');
+        $message->load(['replies', 'orderItems']);
 
         return view('admin.messages.show', compact('message'));
     }

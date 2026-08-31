@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RefillController as AdminRefillController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -29,6 +30,16 @@ Route::get('/refills', [RefillController::class, 'index'])->name('refills.index'
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+/*
+|--------------------------------------------------------------------------
+| Cart (guest, session based — slide-over drawer, no separate page)
+|--------------------------------------------------------------------------
+*/
+Route::post('cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::patch('cart/{key}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('cart/{key}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
 /*
 |--------------------------------------------------------------------------

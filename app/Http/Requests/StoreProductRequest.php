@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
@@ -19,6 +20,14 @@ class StoreProductRequest extends FormRequest
             'short_description' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
+            'price' => ['sometimes', 'integer', 'min:0'],
+            'main_accords' => ['nullable', 'array', function (string $attribute, mixed $value, \Closure $fail) {
+                if (count($value ?? []) > 4) {
+                    $fail('Pilih maksimal 4 main accords.');
+                }
+            }],
+            'main_accords.*.accord' => ['required', 'string', 'distinct', 'in:' . implode(',', Product::ACCORDS)],
+            'main_accords.*.percent' => ['required', 'integer', 'min:1', 'max:100'],
             'fragrance_family' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:255'],
             'longevity' => ['nullable', 'string', 'max:255'],

@@ -113,13 +113,6 @@
      ============================================================ --}}
 <section class="mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 py-16 sm:py-24">
 
-    @if (session('status'))
-        <div class="mb-10 border border-[#b79a5a]/40 bg-[#b79a5a]/10 p-4 text-xs sm:text-sm text-[#111111] flex items-center justify-between">
-            <span>{{ session('status') }}</span>
-            <span class="font-medium">✓</span>
-        </div>
-    @endif
-
     @if ($grouped->isEmpty())
         <div class="border border-[#111111]/10 bg-[#f7f7f5] p-12 sm:p-16 text-center">
             <p class="text-sm text-[#111111]/60">Varian aroma refill baru sedang disiapkan — silakan cek kembali segera.</p>
@@ -235,6 +228,51 @@
                             Send Refill Request &rarr;
                         </button>
                     </form>
+
+                    {{-- Add to Cart (separate form, no checkout fields required) --}}
+                    <form method="POST" action="{{ route('cart.add') }}" class="mt-6 space-y-4 border-t border-[#111111]/10 pt-6">
+                        @csrf
+                        <input type="hidden" name="type" value="refill">
+                        <input type="hidden" name="refill_name" id="refill_name" value="{{ old('selected_refill') }}">
+
+                        <div>
+                            <span class="text-[11px] font-sans font-medium uppercase tracking-widest text-[#b79a5a]">Order Lebih dari Satu?</span>
+                            <p class="mt-1 text-xs text-[#111111]/65 font-sans font-light">
+                                Tambahkan refill ini ke keranjang untuk digabung dengan pesanan lain, lalu checkout sekali.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="cart_bottle_size" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Ukuran Botol *</label>
+                                <select name="bottle_size" id="cart_bottle_size" required
+                                        class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
+                                    <option value="">Pilih ukuran</option>
+                                    @foreach ($bottleSizes as $ml => $price)
+                                        <option value="{{ $ml }}">{{ $ml }} ml — {{ $price }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cart_quantity" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Jumlah *</label>
+                                <select name="quantity" id="cart_quantity" required
+                                        class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+
+                        @error('refill_name')
+                            <p class="text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+
+                        <button type="submit" data-cart-submit
+                                class="w-full bg-[#b79a5a] text-white py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-[#a8884b]">
+                            + Tambahkan ke Keranjang
+                        </button>
+                    </form>
                 </div>
             </div>
 
@@ -258,6 +296,7 @@
         var indicator = document.getElementById('selected-refill');
         var container = document.getElementById('selected-refill-container');
         var hiddenRefill = document.querySelector('input[name="selected_refill"]');
+        var cartRefill = document.getElementById('refill_name');
         var sizeField = document.getElementById('bottle_size');
         var form = indicator ? indicator.closest('form') : null;
         var current = '';
@@ -295,6 +334,10 @@
 
             if (hiddenRefill) {
                 hiddenRefill.value = name;
+            }
+
+            if (cartRefill) {
+                cartRefill.value = name;
             }
 
             if (window.innerWidth < 1024 && form) {

@@ -20,6 +20,7 @@ class RefillController extends Controller
                 $q->where('is_active', $request->string('status') === 'active');
             })
             ->ordered()
+            ->withCount('orders')
             ->paginate(15)
             ->withQueryString();
 

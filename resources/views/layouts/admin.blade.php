@@ -9,7 +9,7 @@
 <body class="bg-[#f7f7f5] text-ink">
     <div class="flex min-h-screen">
         <aside data-sidebar
-               class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform border-r border-black/10 bg-white p-6 transition-transform duration-300 md:static md:translate-x-0">
+               class="fixed inset-y-0 left-0 z-40 w-64 -translate-x-full transform border-r border-black/10 bg-white p-6 transition-transform duration-300 md:translate-x-0">
             <a href="{{ route('home') }}" class="font-serif text-xl">{{ config('app.name') }}</a>
             <p class="mt-1 text-xs uppercase tracking-widest2 text-ink/40">Admin</p>
 
@@ -25,11 +25,12 @@
                     <p class="px-3 text-xs uppercase tracking-widest2 text-ink/30">Content</p>
                     <div class="mt-2 space-y-1">
                         @foreach ([
-                            'admin.products.index' => 'Products',
-                            'admin.refills.index' => 'Refill Collection',
-                        ] as $routeName => $label)
-                            <a href="{{ route($routeName) }}"
-                               class="block rounded px-3 py-2 text-sm transition {{ request()->routeIs($routeName) || request()->routeIs($routeName.'.*') ? 'bg-ink text-white' : 'text-ink/70 hover:bg-black/5' }}">
+                            'admin.products' => 'Products',
+                            'admin.refills' => 'Refill Collection',
+                            'admin.fragrance-notes' => 'Fragrance'
+                        ] as $routeGroup => $label)
+                            <a href="{{ route($routeGroup . '.index') }}"
+                               class="block rounded px-3 py-2 text-sm transition {{ request()->routeIs($routeGroup . '.*') ? 'bg-ink text-white' : 'text-ink/70 hover:bg-black/5' }}">
                                 {{ $label }}
                             </a>
                         @endforeach
@@ -70,7 +71,7 @@
             </form>
         </aside>
 
-        <div class="flex-1">
+        <div class="flex-1 md:ml-64">
             <header class="flex items-center justify-between border-b border-black/10 bg-white px-6 py-4 md:hidden">
                 <button type="button" data-sidebar-toggle class="text-sm uppercase tracking-widest2">Menu</button>
                 <span class="font-serif">{{ config('app.name') }}</span>

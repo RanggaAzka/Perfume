@@ -19,6 +19,12 @@ class ProductSeeder extends Seeder
                 'fragrance_family' => 'Warm / Elegant',
                 'category' => 'Eau de Parfum',
                 'longevity' => '6-8 hours',
+                'price' => 45000,
+                'main_accords' => [
+                    ['accord' => 'Sweet', 'percent' => 45],
+                    ['accord' => 'Floral', 'percent' => 30],
+                    ['accord' => 'Powdery', 'percent' => 25],
+                ],
                 'is_active' => true,
                 'sort_order' => 1,
             ]
@@ -41,6 +47,12 @@ class ProductSeeder extends Seeder
                 'fragrance_family' => 'Fresh / Modern',
                 'category' => 'Eau de Parfum',
                 'longevity' => '5-7 hours',
+                'price' => 45000,
+                'main_accords' => [
+                    ['accord' => 'Fresh', 'percent' => 40],
+                    ['accord' => 'Citrus', 'percent' => 35],
+                    ['accord' => 'Aquatic', 'percent' => 25],
+                ],
                 'is_active' => true,
                 'sort_order' => 2,
             ]

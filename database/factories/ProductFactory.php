@@ -23,8 +23,31 @@ class ProductFactory extends Factory
             'fragrance_family' => fake()->randomElement(['Warm / Elegant', 'Fresh / Modern', 'Woody / Earthy']),
             'category' => 'Eau de Parfum',
             'longevity' => '6-8 hours',
+            'price' => 45000,
+            'main_accords' => fn (): array => static::randomAccords(),
             'is_active' => true,
             'sort_order' => fake()->numberBetween(1, 10),
         ];
+    }
+
+    public static function randomAccords(): array
+    {
+        $count = fake()->numberBetween(1, 4);
+        $accords = fake()->randomElements(Product::ACCORDS, $count);
+        $cuts = collect(range(1, $count - 1))
+            ->map(fn () => fake()->numberBetween(1, 99))
+            ->sort()
+            ->values();
+
+        $last = 0;
+        $rows = [];
+
+        foreach ($accords as $i => $accord) {
+            $cut = $cuts[$i] ?? 100;
+            $rows[] = ['accord' => $accord, 'percent' => $cut - $last];
+            $last = $cut;
+        }
+
+        return $rows;
     }
 }
