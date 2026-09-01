@@ -242,7 +242,7 @@
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-2 gap-3 items-end">
                             <div>
                                 <label for="cart_bottle_size" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Ukuran Botol *</label>
                                 <select name="bottle_size" id="cart_bottle_size" required
@@ -254,13 +254,19 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="cart_quantity" class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Jumlah *</label>
-                                <select name="quantity" id="cart_quantity" required
-                                        class="mt-1.5 w-full border border-[#111111]/20 bg-[#f7f7f5] px-3.5 py-2.5 text-xs text-[#111111] focus:border-[#111111] focus:bg-white focus:outline-none transition">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <label class="block text-xs uppercase tracking-widest text-[#111111]/50 font-medium">Jumlah *</label>
+                                <div class="mt-1.5 flex h-[38px] items-center justify-between border border-[#111111]/20 bg-[#f7f7f5] px-2">
+                                    <button type="button"
+                                            onclick="const input = this.parentNode.querySelector('input'); input.value = Math.max(1, parseInt(input.value || '1', 10) - 1);"
+                                            class="h-7 w-7 text-sm font-medium text-[#111111] transition hover:bg-[#111111] hover:text-white flex items-center justify-center select-none"
+                                            aria-label="Kurangi jumlah">&minus;</button>
+                                    <input type="number" name="quantity" id="cart_quantity" value="1" min="1" max="99" readonly aria-label="Jumlah"
+                                           class="w-8 border-0 bg-transparent p-0 text-center text-xs font-semibold text-[#111111] focus:ring-0 select-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                    <button type="button"
+                                            onclick="const input = this.parentNode.querySelector('input'); input.value = Math.min(99, parseInt(input.value || '1', 10) + 1);"
+                                            class="h-7 w-7 text-sm font-medium text-[#111111] transition hover:bg-[#111111] hover:text-white flex items-center justify-center select-none"
+                                            aria-label="Tambah jumlah">+</button>
+                                </div>
                             </div>
                         </div>
 
@@ -269,8 +275,13 @@
                         @enderror
 
                         <button type="submit" data-cart-submit
-                                class="w-full bg-[#b79a5a] text-white py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-[#a8884b]">
-                            + Tambahkan ke Keranjang
+                                class="group/btn w-full inline-flex items-center justify-center gap-2 bg-[#111111] text-white hover:bg-[#b79a5a] py-3.5 text-xs font-medium uppercase tracking-widest transition-all duration-300 shadow-sm">
+                            <svg class="h-4 w-4 transition-transform duration-200 group-hover/btn:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                <line x1="3" y1="6" x2="21" y2="6"/>
+                                <path d="M16 10a4 4 0 0 1-8 0"/>
+                            </svg>
+                            <span>+ Tambahkan ke Keranjang</span>
                         </button>
                     </form>
                 </div>

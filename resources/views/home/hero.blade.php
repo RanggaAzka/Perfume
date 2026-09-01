@@ -14,13 +14,33 @@
 
     {{-- Main Container (Full Height Flex layout: Logo at top, Headline in middle, Nav at bottom) --}}
     <div class="relative z-10 mx-auto w-full max-w-[1440px] h-full min-h-screen lg:min-h-[800px] flex flex-col justify-between px-8 py-8 sm:px-12 sm:py-10 lg:px-16 lg:py-12">
-        {{-- Header / Logo --}}
-        <div class="z-20">
+        {{-- Header / Logo & Cart --}}
+        <div class="z-20 flex items-center justify-between">
             <a href="{{ route('home') }}" class="inline-block transition hover:opacity-80">
                 <img src="{{ asset('images/Perfume.png') }}"
                      alt="Perfu.me"
                      class="h-9 sm:h-11 md:h-12 w-24 object-contain">
             </a>
+
+            @php
+                $heroCartCount = app(\App\Services\CartService::class)->count();
+            @endphp
+            <div class="hidden lg:flex items-center">
+                <button type="button" data-cart-open
+                        aria-label="Buka keranjang"
+                        aria-controls="cart-drawer"
+                        class="group relative inline-flex items-center justify-center p-2 text-[#111111]/80 transition hover:text-[#111111]">
+                    <svg class="h-6 w-6 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    <span data-cart-count
+                          class="absolute -top-1 -right-1.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#b79a5a] px-1 text-[9px] font-semibold text-white shadow-sm {{ $heroCartCount > 0 ? '' : 'hidden' }}">
+                        {{ $heroCartCount > 99 ? '99+' : $heroCartCount }}
+                    </span>
+                </button>
+            </div>
         </div>
 
         {{-- Hero Content (Left) & Mobile Bottles --}}

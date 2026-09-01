@@ -84,11 +84,12 @@
                             </div>
                         @endif
 
-                        {{-- Action Link --}}
+                        {{-- Action Link & Longevity --}}
                         <div class="mt-6 sm:mt-8 flex items-center justify-between pt-2">
                             <a href="{{ route('products.show', $product) }}"
-                               class="inline-block text-xs font-medium tracking-wider text-[#111111] border-b border-[#111111] pb-1 transition hover:opacity-50 uppercase">
-                                View Scent Details &rarr;
+                               class="inline-flex items-center gap-1 text-xs font-medium tracking-wider text-[#111111] border-b border-[#111111] pb-0.5 transition hover:text-[#b79a5a] hover:border-[#b79a5a] uppercase">
+                                <span>View Scent Details</span>
+                                <span aria-hidden="true">&rarr;</span>
                             </a>
 
                             @if ($product->longevity)
@@ -98,19 +99,34 @@
                             @endif
                         </div>
 
-                        {{-- Add to Cart --}}
-                        <form method="POST" action="{{ route('cart.add') }}" class="mt-5 flex items-center gap-2 border-t border-[#111111]/10 pt-4">
+                        {{-- Add to Cart Form --}}
+                        <form method="POST" action="{{ route('cart.add') }}" class="mt-5 flex items-stretch gap-2.5 border-t border-[#111111]/10 pt-4">
                             @csrf
                             <input type="hidden" name="type" value="product">
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <select name="quantity" aria-label="Jumlah" class="border border-[#111111]/20 bg-white px-2 py-2 text-xs text-[#111111] focus:border-[#111111] focus:outline-none">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
+
+                            {{-- Quantity Stepper (- 1 +) --}}
+                            <div class="flex items-center border border-[#111111]/20 bg-white">
+                                <button type="button"
+                                        onclick="const input = this.parentNode.querySelector('input'); input.value = Math.max(1, parseInt(input.value || '1', 10) - 1);"
+                                        class="h-full w-7 text-sm font-medium text-[#111111] transition hover:bg-[#111111] hover:text-white flex items-center justify-center select-none"
+                                        aria-label="Kurangi jumlah">&minus;</button>
+                                <input type="number" name="quantity" value="1" min="1" max="99" readonly aria-label="Jumlah"
+                                       class="w-7 border-0 bg-transparent p-0 text-center text-xs font-semibold text-[#111111] focus:ring-0 select-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <button type="button"
+                                        onclick="const input = this.parentNode.querySelector('input'); input.value = Math.min(99, parseInt(input.value || '1', 10) + 1);"
+                                        class="h-full w-7 text-sm font-medium text-[#111111] transition hover:bg-[#111111] hover:text-white flex items-center justify-center select-none"
+                                        aria-label="Tambah jumlah">+</button>
+                            </div>
+
                             <button type="submit"
-                                    class="flex-1 bg-[#b79a5a] text-white px-4 py-2.5 text-[11px] font-medium uppercase tracking-widest transition hover:bg-[#a8884b]">
-                                Tambah ke Keranjang
+                                    class="group/btn flex-1 inline-flex items-center justify-center gap-2 bg-[#111111] text-white hover:bg-[#b79a5a] px-4 py-2.5 text-[11px] font-medium uppercase tracking-widest transition-all duration-300">
+                                <svg class="h-4 w-4 transition-transform duration-200 group-hover/btn:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                    <line x1="3" y1="6" x2="21" y2="6"/>
+                                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                                </svg>
+                                <span>Tambah ke Keranjang</span>
                             </button>
                         </form>
                     </div>
