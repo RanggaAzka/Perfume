@@ -66,34 +66,38 @@
                     $accordColors = [
                         'Woody' => '#8b5e3c',
                         'Floral' => '#c07a94',
-                        'Fresh' => '#6f9e8f',
+                        'Fresh' => '#5b9279',
                         'Citrus' => '#d09a3f',
                         'Sweet' => '#cf7480',
                         'Spicy' => '#b3543e',
                         'Green' => '#7d8b4f',
-                        'Aquatic' => '#6d9bbf',
+                        'Aquatic' => '#5a8cb3',
                         'Amber' => '#b0703a',
                         'Gourmand' => '#b97a57',
                         'Leather' => '#5a4a42',
-                        'Powdery' => '#a89a8f',
+                        'Powdery' => '#9c8e82',
                     ];
                 @endphp
                 <div class="mt-8">
-                    <p class="section-label">Main Accords</p>
-                    <div class="mt-4 border border-[#111111]/10 bg-[#f7f7f5] p-5 sm:p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <p class="section-label">Main Accords</p>
+                        <span class="text-[10px] uppercase tracking-widest text-[#111111]/40 font-medium">Dominant Olfactive Profile</span>
+                    </div>
+                    <div class="mt-3 border border-[#111111]/10 bg-[#f7f7f5] p-5 sm:p-6 space-y-3.5 shadow-sm">
                         @foreach ($product->mainAccordsSorted() as $accord)
                             @php
                                 $color = $accordColors[$accord['accord']] ?? '#b79a5a';
                             @endphp
                             <div class="flex items-center gap-3">
-                                <span class="flex w-28 shrink-0 items-center gap-2">
-                                    <span class="shrink-0 rounded-full" style="width: 6px; height: 6px; background-color: {{ $color }}"></span>
+                                <span class="flex w-24 sm:w-28 shrink-0 items-center gap-2">
+                                    <span class="shrink-0 rounded-full" style="width: 7px; height: 7px; background-color: {{ $color }}"></span>
                                     <span class="text-[11px] uppercase tracking-widest text-[#111111] font-sans font-medium">{{ $accord['accord'] }}</span>
                                 </span>
-                                <div class="flex-1 rounded-full" style="height: 10px; background-color: {{ $color }}1A">
-                                    <div class="h-full rounded-full" style="width: {{ $accord['percent'] }}%; height: 100%; background-color: {{ $color }}"></div>
+                                <div class="flex-1 rounded-full bg-[#111111]/5 overflow-hidden" style="height: 8px;">
+                                    <div class="h-full rounded-full transition-all duration-700 ease-out"
+                                         style="width: {{ $accord['percent'] }}%; background-color: {{ $color }}"></div>
                                 </div>
-                                <span class="w-9 shrink-0 text-right text-[11px] font-sans font-semibold text-[#111111]">{{ $accord['percent'] }}%</span>
+                                <span class="w-10 shrink-0 text-right text-[11px] font-sans font-semibold text-[#111111]">{{ $accord['percent'] }}%</span>
                             </div>
                         @endforeach
                     </div>
