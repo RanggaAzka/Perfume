@@ -120,41 +120,59 @@
                 </div>
             </div>
 
-            {{-- Add to Cart --}}
-            <form method="POST" action="{{ route('cart.add') }}" class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-                @csrf
-                <input type="hidden" name="type" value="product">
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <div class="flex items-center justify-between border border-[#111111]/20 bg-[#f7f7f5] px-4 py-3">
-                    <label for="product-qty" class="text-xs uppercase tracking-widest text-[#111111]/50 font-medium mr-4">Qty</label>
-                    <select name="quantity" id="product-qty" class="bg-transparent text-xs text-[#111111] focus:outline-none">
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option value="{{ $i }}" @selected(old('quantity') == $i)>{{ $i }}</option>
-                        @endfor
-                    </select>
+            {{-- Purchase & CTAs Area --}}
+            <div class="mt-8 space-y-4">
+                {{-- Add to Cart Form --}}
+                <form method="POST" action="{{ route('cart.add') }}" class="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4">
+                    @csrf
+                    <input type="hidden" name="type" value="product">
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                    {{-- Quantity Stepper (- 1 +) --}}
+                    <div class="flex items-center justify-between border border-[#111111]/20 bg-[#f7f7f5] px-3 py-2 sm:w-32 shrink-0">
+                        <span class="text-[10px] uppercase tracking-widest text-[#111111]/50 font-medium pl-1">Qty</span>
+                        <div class="flex items-center">
+                            <button type="button"
+                                    onclick="const input = this.parentNode.querySelector('input'); input.value = Math.max(1, parseInt(input.value || '1', 10) - 1);"
+                                    class="h-7 w-7 text-sm font-medium text-[#111111] transition hover:bg-[#111111] hover:text-white flex items-center justify-center select-none"
+                                    aria-label="Kurangi jumlah">&minus;</button>
+                            <input type="number" name="quantity" id="product-qty" value="{{ old('quantity', 1) }}" min="1" max="99" readonly aria-label="Jumlah"
+                                   class="w-7 border-0 bg-transparent p-0 text-center text-xs font-semibold text-[#111111] focus:ring-0 select-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                            <button type="button"
+                                    onclick="const input = this.parentNode.querySelector('input'); input.value = Math.min(99, parseInt(input.value || '1', 10) + 1);"
+                                    class="h-7 w-7 text-sm font-medium text-[#111111] transition hover:bg-[#111111] hover:text-white flex items-center justify-center select-none"
+                                    aria-label="Tambah jumlah">+</button>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="group/btn flex-1 inline-flex items-center justify-center gap-2.5 bg-[#111111] text-white hover:bg-[#b79a5a] py-3.5 px-8 text-xs font-medium uppercase tracking-widest transition-all duration-300 shadow-sm">
+                        <svg class="h-4 w-4 transition-transform duration-200 group-hover/btn:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                        <span>Tambah ke Keranjang</span>
+                    </button>
+                </form>
+
+                {{-- Direct WhatsApp & Custom Order Links --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a href="https://wa.me/6281383415432?text={{ urlencode('Halo Perfu.me, saya ingin memesan ' . $product->name . ' (30ml EDP, ' . $product->priceFormatted() . ').') }}"
+                       target="_blank"
+                       rel="noopener"
+                       class="inline-flex items-center justify-center gap-2 border border-[#111111]/20 bg-white px-5 py-3 text-xs font-medium text-[#111111] uppercase tracking-widest transition hover:border-[#111111] hover:bg-[#f7f7f5]">
+                        <svg class="h-4 w-4 fill-current text-[#111111]" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm0 18.15c-1.49 0-2.95-.4-4.22-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.24-8.22 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.55c.13.17 1.73 2.65 4.2 3.71.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.12-.23-.19-.48-.31z"/>
+                        </svg>
+                        <span>Direct WhatsApp</span>
+                    </a>
+
+                    <a href="#enquire"
+                       class="inline-flex items-center justify-center border border-[#111111]/20 bg-white px-5 py-3 text-xs font-medium text-[#111111] uppercase tracking-widest transition hover:border-[#111111] hover:bg-[#f7f7f5]">
+                        <span>Order / Enquire Form &darr;</span>
+                    </a>
                 </div>
-                <button type="submit"
-                        class="inline-block text-center bg-[#b79a5a] text-white px-8 py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-[#a8884b]">
-                    Tambah ke Keranjang
-                </button>
-            </form>
-
-            {{-- Action CTAs --}}
-            <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-                <a href="#enquire"
-                   class="inline-block text-center bg-[#111111] text-white px-8 py-3.5 text-xs font-medium uppercase tracking-widest transition hover:bg-black">
-                    Order / Enquire Now
-                </a>
-
-                <a href="https://wa.me/6281383415432?text={{ urlencode('Halo Perfu.me, saya ingin memesan ' . $product->name . ' (30ml EDP, ' . $product->priceFormatted() . ').') }}"
-                   target="_blank"
-                   rel="noopener"
-                   class="inline-flex items-center justify-center gap-2 border border-[#111111]/20 bg-white px-6 py-3.5 text-xs font-medium text-[#111111] uppercase tracking-widest transition hover:border-[#111111]">
-                    <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
-                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.062-2.147-.533-1.859-.762-3.057-2.651-3.15-2.775-.093-.124-.753-.999-.753-1.908s.478-1.355.648-1.54c.17-.185.372-.232.496-.232.124 0 .248.001.357.006.113.006.264-.043.413.315.155.372.53 1.293.576 1.386.046.093.078.201.016.325-.062.124-.093.201-.186.31-.093.109-.196.243-.28.326-.093.093-.19.195-.082.381.109.186.483.796 1.037 1.289.714.636 1.315.834 1.501.927.186.093.294.078.403-.047.109-.124.465-.542.589-.728.124-.186.248-.155.418-.093.17.062 1.084.511 1.27.604.186.093.31.14.356.217.046.077.046.449-.098.854z"/>
-                    </svg>
-                    Direct WhatsApp
-                </a>
             </div>
 
         </div>
