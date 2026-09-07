@@ -3,7 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? 'Admin' }} — {{ config('app.name') }}</title>
+    <title>@yield('title', $title ?? 'Overview') — {{ config('app.name') }} Admin</title>
+    <meta name="theme-color" content="#111111">
+
+    {{-- Favicon & App Icons (langsung dari images/Perfume.png) --}}
+    <link rel="icon" type="image/png" href="{{ asset('images/Perfume.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/Perfume.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/Perfume.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#f7f7f5] text-ink antialiased">
@@ -146,7 +153,7 @@
                 <div class="mb-8">
                     <p class="section-label">Administration</p>
                     <h1 class="mt-1 font-serif text-3xl sm:text-4xl text-[#111111] font-normal tracking-tight">
-                        {{ $title ?? 'Dashboard' }}
+                        @yield('title', $title ?? 'Dashboard')
                     </h1>
                 </div>
 

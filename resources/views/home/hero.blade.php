@@ -44,14 +44,14 @@
             {{-- Mobile-only bottle display (Stacked below text on small screens) --}}
             <div class="lg:hidden mt-10 flex justify-center">
                 <img src="{{ asset('images/hero-bottles.png') }}"
-                     alt="Perfume Signature Bottles"
+                     alt="Perfu.me Signature Bottles"
                      class="w-full max-w-[360px] object-contain drop-shadow-xl animate-float">
             </div>
         </div>
 
         {{-- Minimalist Bottom Navigation --}}
         <div class="z-20 pt-6">
-            <nav class="flex items-center flex-wrap gap-8 sm:gap-10 text-xs text-[#111111]/80 font-sans font-light tracking-wide">
+            <nav class="flex items-center flex-wrap gap-8 sm:gap-10 text-xs text-[#111111]/80 font-sans tracking-wide">
                 @foreach ($navLinks as $item)
                     <a href="{{ $item['url'] }}" class="transition hover:text-[#111111]">
                         {{ $item['label'] }}
@@ -64,7 +64,7 @@
     {{-- Desktop Floating Bottles (Centered across the split line boundary between white & dark shape) --}}
     <div class="hidden lg:flex absolute right-[16%] xl:right-[17%] top-1/2 -translate-y-1/2 z-10 pointer-events-none items-center justify-center">
         <img src="{{ asset('images/hero-bottles.png') }}"
-             alt="Perfume Signature Bottles"
+             alt="Perfu.me Signature Bottles"
              class="w-[640px] xl:w-[760px] max-w-none object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] animate-float">
     </div>
 </section>

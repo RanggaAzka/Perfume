@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Our Collection — ' . config('app.name'))
+@section('title', 'Signature Fragrances — ' . config('app.name'))
 @section('meta_description', 'Jelajahi koleksi Eau de Parfum signature dari Perfu.me — diracik dengan karakter premium, perpaduan aroma khas, dan harga yang jujur.')
 
 @section('content')

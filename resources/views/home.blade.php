@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', config('app.name') . ' — Smell Good. Feel Confident.')
-@section('meta_description', 'Discover affordable fragrances with premium character, designed for every moment.')
+@section('title', config('app.name') . ' — Smell Good, Feel Confident.')
+@section('meta_description', 'Discover affordable luxury fragrances with premium character by Perfu.me, designed for every moment.')
 
 @section('content')
     @include('home.hero')
