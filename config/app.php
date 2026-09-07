@@ -2,7 +2,7 @@
 
 return [
 
-    'name' => env('APP_NAME', 'PERFU.ME'),
+    'name' => env('APP_NAME', 'Perfu.me'),
 
     'env' => env('APP_ENV', 'production'),
 

@@ -3,14 +3,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? 'Sign in' }} — {{ config('app.name') }}</title>
+    <title>@yield('title', $title ?? 'Sign In') — {{ config('app.name') }}</title>
+    <meta name="theme-color" content="#111111">
+
+    {{-- Favicon & App Icons (images/P-Logo.png) --}}
+    <link rel="icon" type="image/png" href="{{ asset('images/P-Logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/P-Logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/P-Logo.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex min-h-screen items-center justify-center bg-[#f7f7f5] px-6 py-12 text-ink antialiased">
     <div class="w-full max-w-md">
         <div class="mb-8 text-center">
-            <a href="{{ route('home') }}" class="inline-block transition hover:opacity-80">
-                <img src="{{ asset('images/Perfume.png') }}" alt="{{ config('app.name') }}" class="h-8 mx-auto object-contain">
+            <a href="{{ route('home') }}" class="inline-block transition hover:opacity-80" aria-label="Perfu.me">
+                <img src="{{ asset('images/P-Logo.png') }}" alt="{{ config('app.name') }}" class="h-10 w-10 mx-auto object-contain">
             </a>
             <p class="mt-2 text-[10px] font-medium uppercase tracking-widest text-[#111111]/40 font-sans">
                 Admin Console

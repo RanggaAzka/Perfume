@@ -17,7 +17,7 @@
             <div class="space-y-5">
                 <div>
                     <a href="{{ route('home') }}" class="inline-block transition hover:opacity-80">
-                        <img src="{{ asset('images/Perfume.png') }}" alt="Perfume" class="h-7 sm:h-8 w-24 object-contain">
+                        <img src="{{ asset('images/Perfume.png') }}" alt="Perfu.me" class="h-7 sm:h-8 w-24 object-contain">
                     </a>
                 </div>
 
@@ -73,7 +73,7 @@
                 </nav>
 
                 <p class="text-[11px] text-[#111111]/60 tracking-wide font-sans font-light">
-                    &copy; 2025 Perfume | All Rights Reserved
+                    &copy; {{ date('Y') }} Perfu.me. All rights reserved.
                 </p>
             </div>
 

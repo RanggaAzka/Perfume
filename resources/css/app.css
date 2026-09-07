@@ -44,9 +44,12 @@ body {
 }
 
 @keyframes floatBottle {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px) rotate(0deg);
     }
+
     50% {
         transform: translateY(-8px) rotate(0.5deg);
     }
@@ -55,4 +58,3 @@ body {
 .animate-float {
     animation: floatBottle 6s ease-in-out infinite;
 }
-

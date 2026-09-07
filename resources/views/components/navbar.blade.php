@@ -33,20 +33,22 @@
         @endif
 
         <div class="flex items-center gap-3 sm:gap-5">
-            <button type="button" data-cart-open
-                    aria-label="Buka keranjang"
-                    aria-controls="cart-drawer"
-                    class="group relative inline-flex items-center justify-center p-2 text-[#111111]/80 transition hover:text-[#111111]">
-                <svg class="h-5 w-5 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-                <span data-cart-count
-                      class="absolute -top-1 -right-1.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#b79a5a] px-1 text-[9px] font-semibold text-white shadow-sm {{ $cartCount > 0 ? '' : 'hidden' }}">
-                    {{ $cartCount > 99 ? '99+' : $cartCount }}
-                </span>
-            </button>
+            @if (! $isHome)
+                <button type="button" data-cart-open
+                        aria-label="Buka keranjang"
+                        aria-controls="cart-drawer"
+                        class="group relative inline-flex items-center justify-center p-2 text-[#111111]/80 transition hover:text-[#111111]">
+                    <svg class="h-5 w-5 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    <span data-cart-count
+                          class="absolute -top-1 -right-1.5 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#b79a5a] px-1 text-[9px] font-semibold text-white shadow-sm {{ $cartCount > 0 ? '' : 'hidden' }}">
+                        {{ $cartCount > 99 ? '99+' : $cartCount }}
+                    </span>
+                </button>
+            @endif
 
             <button type="button" data-mobile-toggle aria-expanded="false" aria-controls="mobile-menu"
                     class="flex flex-col gap-1.5 md:hidden p-2">
